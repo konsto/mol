@@ -1,12 +1,13 @@
 package plugin;
 
-import java.util.List;
+import java.lang.reflect.Method;
 
-public interface IPlugin 
+public interface IPlugin
 {
 
-	Object callFunction(String methodName, List<Object> args);
+	Object callFunction(String methodName, Object... args)
+			throws NoSuchMethodException;
 	
-	List<String> getAllMethods();
+	Method[] getAllMethods();
 
 }

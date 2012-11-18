@@ -11,4 +11,10 @@ public class CommentNode implements INode {
     public String getContent() {
         return this.content;
     }
+    
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
+        
+    }
 }

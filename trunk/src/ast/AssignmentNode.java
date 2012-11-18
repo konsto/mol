@@ -18,4 +18,10 @@ public class AssignmentNode implements IExpressionNode {
     public IExpressionNode getValue() {
         return this.value;
     }
+
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
+        
+    }
 }

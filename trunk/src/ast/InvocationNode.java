@@ -26,4 +26,10 @@ public class InvocationNode implements IExpressionNode {
     public List<IExpressionNode> getParams() {
         return this.params;
     }
+    
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
+        
+    }
 }

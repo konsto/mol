@@ -11,4 +11,10 @@ public class LiteralNode implements IExpressionNode {
     public Object getValue() {
         return this.value;
     }
+    
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
+        
+    }
 }

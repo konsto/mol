@@ -1,0 +1,7 @@
+import Math as m
+import Console as c
+
+# calc sqrt of 5
+a = 5
+b = m.sqrt(a)
+c.print(b)

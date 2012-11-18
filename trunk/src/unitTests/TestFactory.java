@@ -1,4 +1,4 @@
-package test_plugins;
+package unitTests;
 
 import java.util.HashMap;
 import java.util.Map;

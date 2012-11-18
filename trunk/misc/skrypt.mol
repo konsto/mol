@@ -1,0 +1,15 @@
+import math as m
+import console as c
+
+a = 4
+b = m.sqrt(a) + m.getRandom(10)
+if (b > 3):
+	c.print(b + "> 3")
+else:
+	c.print(b + "< 3")
+lista = [1,2,3,4]
+
+for elem in lista:
+	c.print(elem - 1)
+
+

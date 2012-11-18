@@ -17,4 +17,10 @@ public class ImportNode implements INode {
     public String getAlias() {
         return this.alias;
     }
+    
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
+        
+    }
 }

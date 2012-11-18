@@ -12,4 +12,9 @@ public class VariableNode implements IExpressionNode {
         return this.identifier;
     }
 
+    @Override
+    public void accept(IVisitor visitor) {
+        visitor.visit(this);
+    }
+
 }

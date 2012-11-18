@@ -12,7 +12,6 @@ import exceptions.NoSuchPluginException;
 import plugin.IPlugin;
 import plugin.IPluginManager;
 import plugin.PluginManager;
-import test_plugins.TestFactory;
 
 public class ManagerTest 
 {

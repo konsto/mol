@@ -1,4 +1,4 @@
-package test_plugins;
+package unitTests;
 
 import java.lang.reflect.Method;
 

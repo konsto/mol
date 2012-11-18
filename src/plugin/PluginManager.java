@@ -23,6 +23,7 @@ public class PluginManager implements IPluginManager
 		factories.add(factory);
 	}
 	
+	//TODO: Przy roznych aliasach ten sam plugin musi byc tym samym obiektem
 	@Override
 	public void importPlugin(String alias, String pluginName) 
 			throws AliasAlreadyExistsException, ClassNotFoundException,

@@ -4,12 +4,12 @@ public class PrintVisitor implements IVisitor {
 
     @Override
     public void visit(AssignmentNode node) {
-        System.out.format("Assigment node (%s)", node.getIdentifier());
+        System.out.format("Assigment node (%s)%n", node.getIdentifier());
     }
 
     @Override
     public void visit(CommentNode node) {
-        System.out.format("Comment node (%s)", node.getContent());
+        System.out.format("Comment node (%s)%n", node.getContent());
     }
 
     @Override
@@ -24,23 +24,23 @@ public class PrintVisitor implements IVisitor {
 
     @Override
     public void visit(ImportNode node) {
-        System.out.format("Import node (%s, %s)", node.getPluginName(),
+        System.out.format("Import node (%s, %s)%n", node.getPluginName(),
                 node.getAlias());
     }
 
     @Override
     public void visit(InvocationNode node) {
-        System.out.format("Invocation node (%s, %s", node.getMethod(),
+        System.out.format("Invocation node (%s, %s)%n", node.getMethod(),
                 node.getPluginAlias());
     }
 
     @Override
     public void visit(LiteralNode node) {
-        System.out.format("Literal node (%s)", node.getValue().toString());
+        System.out.format("Literal node (%s)%n", node.getValue().toString());
     }
 
     @Override
     public void visit(VariableNode node) {
-        System.out.format("Variable node (%s)", node.getIdentifier());
+        System.out.format("Variable node (%s)%n", node.getIdentifier());
     }
 }

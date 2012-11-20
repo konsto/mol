@@ -9,16 +9,21 @@ import plugin.PluginFactory;
 
 public class FactoryTest {
 
-	@Before
-	public void setUp() throws Exception {
+    PluginFactory factory;
 
-	}
+    @Before
+    public void setUp() throws Exception {
+        factory = new PluginFactory();
+    }
 
-	@Test
-	public void test() throws ClassNotFoundException 
-	{
-		PluginFactory factory = new PluginFactory();
-		factory.create("test_plugins.Person");
-	}
+    @Test
+    public void testCreatingPlugin() throws Exception {
+        factory.create("test_plugins.TestModule");
+    }
 
+    @Test (expected = Exception.class)
+    public void testCreatingNonExistingPlugin() throws Exception {
+        factory.create("bad.plugin.name");
+
+    }
 }

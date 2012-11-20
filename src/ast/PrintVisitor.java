@@ -61,4 +61,12 @@ public class PrintVisitor implements IVisitor {
     public void visit(MultiplicationNode node) {
         System.out.println("unknown multiplication node");
     }
+    
+    public void visit(ComparisionNode node) {
+        System.out.println("unknown comparision node");
+    }
+    
+    public void visit(IfNode node) {
+        System.out.println("unknown if node");
+    }
 }

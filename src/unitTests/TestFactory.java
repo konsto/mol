@@ -8,14 +8,14 @@ import plugin.IPluginFactory;
 
 public class TestFactory implements IPluginFactory
 {
-	Map<String, IPlugin> plugins = new HashMap<String, IPlugin>();
+	Map<String, IPlugin> tempPlugins = new HashMap<String, IPlugin>();
 
 	public TestFactory()
 	{
-		plugins.put("first", new TestPlugin());
-		plugins.put("second", new TestPlugin());
-		plugins.put("third", new TestPlugin());
-		plugins.put("fourth", new TestPlugin());
+		tempPlugins.put("first", new TestPlugin());
+		tempPlugins.put("second", new TestPlugin());
+		tempPlugins.put("third", new TestPlugin());
+		tempPlugins.put("fourth", new TestPlugin());
 	}
 
 	@Override
@@ -23,8 +23,8 @@ public class TestFactory implements IPluginFactory
 	{
 		IPlugin plugin = null;
 		
-		if (plugins.containsKey(name))
-			plugin = plugins.get(name);
+		if (tempPlugins.containsKey(name))
+			plugin = tempPlugins.get(name);
 		else
 			throw new ClassNotFoundException();
 		

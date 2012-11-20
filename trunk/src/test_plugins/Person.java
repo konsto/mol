@@ -1,8 +1,6 @@
 package test_plugins;
 
-import plugin.PluginTypeAnnotation;
 
-@PluginTypeAnnotation (type = "static")
 public class Person 
 {
 	private String name;
@@ -33,6 +31,10 @@ public class Person
 	    return first + second;
 	}
 
+	public double test(int a) {
+	    return Math.sqrt(a);
+	}
+	
 	public String toString()
 	{
 		String result =  this.name + " " + this.surname + " "; 

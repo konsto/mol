@@ -24,4 +24,8 @@ public interface IVisitor {
     
     public void visit(MultiplicationNode node);
     
+    public void visit(ComparisionNode node);
+    
+    public void visit(IfNode node);
+    
 }

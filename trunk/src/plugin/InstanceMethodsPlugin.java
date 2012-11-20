@@ -22,6 +22,7 @@ public class InstanceMethodsPlugin implements IPlugin {
         Class[] givenParametersTypes = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
             givenParametersTypes[i] = args[i].getClass();
+            System.out.println(givenParametersTypes[i]);
         }
         Method method = pluginInstance.getClass().getMethod(methodName,
                 givenParametersTypes);
@@ -34,5 +35,6 @@ public class InstanceMethodsPlugin implements IPlugin {
         }
         return result;
     }
+    
 
 }

@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import plugin.IPlugin;
 import plugin.InstanceMethodsPlugin;
-import plugin.StaticMethodsPlugin;
 
 public class IPluginInstanceMethodsTest
 {

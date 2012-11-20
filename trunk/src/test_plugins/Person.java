@@ -1,8 +1,8 @@
 package test_plugins;
 
-import plugin.APluginType;
+import plugin.PluginTypeAnnotation;
 
-@APluginType (type = "static")
+@PluginTypeAnnotation (type = "static")
 public class Person 
 {
 	private String name;

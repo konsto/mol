@@ -35,6 +35,14 @@ public class PluginManager implements IPluginManager
 		if (factories.size() < 1)
 			throw new NoFactoryException();
 		
+		for (String key: this.plugins.keySet()) {
+		    IPlugin currentPlugin = plugins.get(key);
+		    Class temp =currentPlugin.getClass();
+		    if (temp.equals(Class.forName(pluginName))) {
+		        plugins.put(alias, currentPlugin);
+		    }
+		}
+		
 		IPlugin plugin = factories.get(0).create(pluginName);
 		
 		plugins.put(alias, plugin);

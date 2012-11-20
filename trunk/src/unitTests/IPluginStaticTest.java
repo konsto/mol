@@ -28,16 +28,6 @@ public class IPluginStaticTest {
 		plugin = new StaticMethodsPlugin(c);
 		methodName = "setName";
 	}
-
-	@SuppressWarnings("deprecation")
-	@Test
-	public void testGetMethods() 
-	{
-		assertTrue(plugin != null);
-		Method[] expected = Person.class.getMethods(); 
-		Method[] actual = plugin.getAllMethods();
-		assertEquals(expected, actual);
-	}
 	
 	@Test
 	public void testCallFunctionWithParams()

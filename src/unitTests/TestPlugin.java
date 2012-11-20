@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 import plugin.APluginType;
 import plugin.IPlugin;
 
-@APluginType (type = "static")
+
 public class TestPlugin implements IPlugin
 {
 

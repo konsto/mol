@@ -1,6 +1,16 @@
 package ast;
 
 public class PrintVisitor implements IVisitor {
+    
+    @Override
+    public void visit(INode node) {
+        System.out.println("unknown node");
+    }
+    
+    @Override
+    public void visit(IExpressionNode node) {
+        System.out.println("unknown expression node");
+    }
 
     @Override
     public void visit(AssignmentNode node) {
@@ -42,5 +52,13 @@ public class PrintVisitor implements IVisitor {
     @Override
     public void visit(VariableNode node) {
         System.out.format("Variable node (%s)%n", node.getIdentifier());
+    }
+    
+    public void visit(AdditionNode node) {
+        System.out.println("unknown additional node");
+    }
+    
+    public void visit(MultiplicationNode node) {
+        System.out.println("unknown multiplication node");
     }
 }

@@ -29,6 +29,10 @@ public class Person
 		this.surname = surname;
 	}
 	
+	public static String concatenate(String first, String second) {
+	    return first + second;
+	}
+
 	public String toString()
 	{
 		String result =  this.name + " " + this.surname + " "; 

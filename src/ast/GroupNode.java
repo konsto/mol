@@ -16,10 +16,7 @@ public class GroupNode implements INode {
     }
 
     public void accept(IVisitor visitor) {
-//        for (INode child : children) {
-//            child.accept(visitor);
-//        }
-//        visitor.visit(this);
+        visitor.visit(this);
     }
     
     public INodeIterator getChildrenIterator()

@@ -128,7 +128,6 @@ public class ToyEvaluateVisitor implements IVisitor {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -159,7 +158,7 @@ public class ToyEvaluateVisitor implements IVisitor {
         Object left = this.value;
         node.getRight().accept(this);
         Object right = this.value;
-        this.value = left == right;
+        this.value = (left == right);
     }
 
     @Override
@@ -173,10 +172,10 @@ public class ToyEvaluateVisitor implements IVisitor {
 
     @Override
     public void visit(IfNode node) {
-        Map<ComparisionNode, IExpressionNode> ifs = node.getIfs();
-        for(ComparisionNode key: ifs.keySet()) {
+        Map<IExpressionNode, GroupNode> ifs = node.getIfs();
+        for (IExpressionNode key : ifs.keySet()) {
             key.accept(this);
-            if(this.value.equals(true)) {
+            if (this.value.equals(true)) {
                 ifs.get(key).accept(this);
                 break;
             } else {

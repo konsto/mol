@@ -1,24 +1,26 @@
 package ast;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class IfNode implements IExpressionNode {
 
-    private Map<ComparisionNode, IExpressionNode> ifs;
-    private IExpressionNode elseExpression;
+    private Map<IExpressionNode, GroupNode> ifs;
+    private GroupNode elseExpression;
 
-    public IfNode(Map<ComparisionNode, IExpressionNode> ifs,
-            IExpressionNode elseExpression) {
 
-        this.ifs = ifs;
+    public IfNode(Map<IExpressionNode, GroupNode> ifs,
+            GroupNode elseExpression) {
+
+        this.ifs = new LinkedHashMap<IExpressionNode, GroupNode>(ifs);
         this.elseExpression = elseExpression;
     }
 
-    public Map<ComparisionNode, IExpressionNode> getIfs() {
+    public Map<IExpressionNode, GroupNode> getIfs() {
         return this.ifs;
     }
 
-    public IExpressionNode getElseExpression() {
+    public GroupNode getElseExpression() {
         return this.elseExpression;
     }
 

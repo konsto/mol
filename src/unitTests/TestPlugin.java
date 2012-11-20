@@ -2,7 +2,7 @@ package unitTests;
 
 import java.lang.reflect.Method;
 
-import plugin.APluginType;
+import plugin.PluginTypeAnnotation;
 import plugin.IPlugin;
 
 
@@ -15,11 +15,4 @@ public class TestPlugin implements IPlugin
 	{
 		return null;
 	}
-
-	@Override
-	public Method[] getAllMethods() 
-	{
-		return null;
-	}
-	
 }

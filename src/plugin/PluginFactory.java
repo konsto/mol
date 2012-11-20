@@ -1,6 +1,7 @@
 package plugin;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 
 public class PluginFactory implements IPluginFactory
 {
@@ -13,13 +14,18 @@ public class PluginFactory implements IPluginFactory
 			throws ClassNotFoundException 
 	{
 		c = Class.forName(name);
-	    Annotation annotation = c.getAnnotation(APluginType.class);
-	    APluginType pluginAnnotation = (APluginType) annotation;
+	    Annotation annotation = c.getAnnotation(PluginTypeAnnotation.class);
+	    PluginTypeAnnotation pluginAnnotation = (PluginTypeAnnotation) annotation;
 	    if (pluginAnnotation.type().equals("static"))
 	    	plugin = new StaticMethodsPlugin(c);
 	    else if (pluginAnnotation.type().equals("instance"))
-	    	plugin = new InstanceMethodsPlugin(c);
-	    else
+            try {
+                plugin = new InstanceMethodsPlugin(c);
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } 
+        else
 	    	plugin = null;
 	    
 		return plugin;

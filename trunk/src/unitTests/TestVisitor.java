@@ -20,80 +20,67 @@ public class TestVisitor implements IVisitor {
 
     @Override
     public void visit(INode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "INode";
     }
 
     @Override
     public void visit(IExpressionNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "IExpressionNode";
     }
 
     @Override
     public void visit(AssignmentNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "AssigmentNode";
     }
 
     @Override
     public void visit(CommentNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "CommentNode";
     }
 
     @Override
     public void visit(GroupNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "GroupNode";
     }
 
     @Override
     public void visit(ImportNode node) {
         this.message = "ImportNode";
-
     }
 
     @Override
     public void visit(InvocationNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "InvocationNode";
     }
 
     @Override
     public void visit(LiteralNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "LiteralNode";
     }
 
     @Override
     public void visit(VariableNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "VariableNode";
     }
 
     @Override
     public void visit(AdditionNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "AdditionNode";
     }
 
     @Override
     public void visit(MultiplicationNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "MultiplicationNode";
     }
     
     @Override
     public void visit(ComparisionNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "ComparisionNode";
     }
     
     @Override
     public void visit(IfNode node) {
-        // TODO Auto-generated method stub
-
+        this.message = "IfNode";
     }
 
 }

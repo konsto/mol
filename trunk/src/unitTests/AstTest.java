@@ -2,7 +2,6 @@ package unitTests;
 
 import static org.junit.Assert.*;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -130,12 +129,16 @@ public class AstTest {
     public void testIfNode() {
         Map<IExpressionNode, GroupNode> ifs = new LinkedHashMap<IExpressionNode, 
                 GroupNode>();
-//        ifs.put(new ComparisionNode(new LiteralNode(6), new LiteralNode(5)), 
-//                new AssignmentNode("a", new LiteralNode("if")));
-//        ifs.put(new LiteralNode(true), 
-//                new AssignmentNode("a", new LiteralNode("1 else if")));
-//        root.addChild(new GroupNode().addChild(new AssignmentNode(identifier, value)));
-//        root.accept(visitor);
-//        System.out.println(visitor.getValue());
+        GroupNode codeBlock =new GroupNode();
+        codeBlock.addChild(new AssignmentNode("a", 
+                new AdditionNode(new LiteralNode(1), new LiteralNode(1))));
+        codeBlock.addChild(new AssignmentNode("b", 
+                new AdditionNode(new VariableNode("a"), new LiteralNode(1))));
+        ifs.put(new ComparisionNode(new LiteralNode(5), new LiteralNode(1)), codeBlock);
+        GroupNode elseCodeBlock = new GroupNode();
+        elseCodeBlock.addChild(new AssignmentNode("b", new LiteralNode(11)));
+        root.addChild(new IfNode(ifs, elseCodeBlock));
+        root.accept(visitor);
+        System.out.println(visitor.getValue());
     }
 }

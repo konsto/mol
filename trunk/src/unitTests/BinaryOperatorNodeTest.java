@@ -19,7 +19,7 @@ public class BinaryOperatorNodeTest {
         BinaryOperatorType operator = BinaryOperatorType.ADDITION;
         BinaryOperatorNode node = new BinaryOperatorNode(leftOperand, 
                 rightOperand, operator);
-        assertEquals(leftOperand, node.getleftOperand());
+        assertEquals(leftOperand, node.getLeftOperand());
         assertEquals(rightOperand, node.getRightOperand());
         assertEquals(operator, node.getOperator());
     }

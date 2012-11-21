@@ -1,11 +1,9 @@
 package unitTests;
 
 import static org.junit.Assert.*;
-
 import org.junit.Test;
-
-import ast.IVisitor;
 import ast.ImportNode;
+import ast.TestVisitor;
 
 public class astImportNodeTest {
 

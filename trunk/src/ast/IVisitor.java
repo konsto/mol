@@ -19,5 +19,9 @@ public interface IVisitor {
     public void visit(BinaryOperatorNode node);
 
     public void visit(UnaryOperatorNode node);
+    
+    public void visit(IfNode node);
+    
+    public void visit(InvocationNode node);
 
 }

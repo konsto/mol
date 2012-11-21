@@ -5,7 +5,11 @@ public class LiteralNode implements IExpressionNode {
     private Object value;
 
     public LiteralNode(Object value) {
-        this.value = value;
+        if (value != null) {
+            this.value = value;
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     public Object getValue() {

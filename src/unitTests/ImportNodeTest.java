@@ -27,5 +27,4 @@ public class ImportNodeTest {
         assertEquals("ImportNode", visitor.message);
     }
 
-
 }

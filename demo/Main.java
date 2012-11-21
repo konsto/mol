@@ -1,6 +1,8 @@
 import java.util.LinkedList;
 import java.util.List;
 
+import unitTests.ToyEvaluateVisitor;
+
 import ast.AdditionNode;
 import ast.AssignmentNode;
 import ast.GroupNode;
@@ -26,10 +28,16 @@ public class Main {
         root.addChild(new AssignmentNode("d", new MultiplicationNode(
                 new VariableNode("a"), new VariableNode("b"))));
         root.addChild(new ImportNode("test_plugins.Person", "tp"));
+        root.addChild(new ImportNode("test_plugins.Mathematic", "m"));
         List<IExpressionNode> callArgs = new LinkedList<IExpressionNode>();
         callArgs.add(new LiteralNode("ALA"));
         callArgs.add(new LiteralNode("KOTA"));
-        root.addChild(new AssignmentNode("e", new InvocationNode("tp", "concatenate", callArgs)));
+        root.addChild(new AssignmentNode("e", new InvocationNode("tp",
+                "concatenate", callArgs)));
+//        List<IExpressionNode> callArgs2 = new LinkedList<IExpressionNode>();
+//        callArgs2.add(new VariableNode("b"));
+//        root.addChild(new AssignmentNode("pierw", new InvocationNode("m",
+//               "testFunction", callArgs2)));  
         root.accept(visitor);
         visitor.printContext();
     }

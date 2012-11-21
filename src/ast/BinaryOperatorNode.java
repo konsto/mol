@@ -13,7 +13,7 @@ public class BinaryOperatorNode implements IExpressionNode {
         this.operator = operator;
     }
     
-    public IExpressionNode getleftOperand() {
+    public IExpressionNode getLeftOperand() {
         return this.leftOperand;
     }
     

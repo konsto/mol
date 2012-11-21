@@ -47,4 +47,16 @@ public class TestVisitor implements IVisitor {
     public void visit(UnaryOperatorNode node) {
         this.message = "UnaryOperatorNode";
     }
+
+    @Override
+    public void visit(IfNode node) {
+        this.message = "IfNode";
+        
+    }
+
+    @Override
+    public void visit(InvocationNode node) {
+        this.message = "InvocationNode";
+        
+    }
 }

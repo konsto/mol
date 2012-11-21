@@ -1,12 +1,10 @@
 package ast;
 
-import java.lang.reflect.Constructor;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
-
-import exceptions.NoSuchVariableException;
-
+import exceptions.NoSuchPluginException;
+import plugin.IPlugin;
 import plugin.IPluginManager;
 import plugin.PluginFactory;
 import plugin.PluginManager;
@@ -24,36 +22,33 @@ public class EvaluateVisitor implements IVisitor {
         manager = temp;
     }
 
-    
     public Object getValue() {
         return this.value;
     }
-    
+
     public Map<String, Object> getContext() {
         return this.context;
     }
-    
+
     public void printContext() {
-        for (String key: context.keySet()) {
+        for (String key : context.keySet()) {
             System.out.println(key + "-->" + context.get(key));
         }
     }
+
     @Override
     public void visit(INode node) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void visit(IExpressionNode node) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void visit(CommentNode node) {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -64,7 +59,6 @@ public class EvaluateVisitor implements IVisitor {
             child.accept(this);
             iterator.next();
         }
-
     }
 
     @Override
@@ -75,22 +69,20 @@ public class EvaluateVisitor implements IVisitor {
         } catch (Exception e) {
             value = false;
         }
-
-    }
+}
 
     @Override
     public void visit(LiteralNode node) {
         value = node.getValue();
-
     }
 
     @Override
-    public void visit(VariableNode node){
+    public void visit(VariableNode node) {
         Object temp = this.context.get(node.getIdentifier());
         if (temp == null) {
             throw new RuntimeException();
         }
-        this.value = temp;     
+        this.value = temp;
     }
 
     @Override
@@ -98,20 +90,20 @@ public class EvaluateVisitor implements IVisitor {
         Object left = null;
         Object right = null;
         BinaryOperatorType operator = node.getOperator();
-        switch (operator){
-        case ADDITION: 
+        switch (operator) {
+        case ADDITION:
             node.getLeftOperand().accept(this);
             left = value;
             node.getRightOperand().accept(this);
             right = value;
-            value = (Integer) left + (Integer) right;
+            value = (int) left + (int) right;
             break;
         case SUBSTRACTION:
             node.getLeftOperand().accept(this);
             left = value;
             node.getRightOperand().accept(this);
             right = value;
-            value = (Integer) left - (Integer) right;
+            value = (int) left - (int) right;
             break;
         case BASIC_ASSIGMENT:
             node.getLeftOperand().accept(this);
@@ -119,17 +111,74 @@ public class EvaluateVisitor implements IVisitor {
             node.getRightOperand().accept(this);
             right = value;
             context.put((String) left, right);
-            
+            break;
+        case EQUAL__TO:
+            node.getLeftOperand().accept(this);
+            left = value;
+            node.getRightOperand().accept(this);
+            right = value;
+            if (left.equals(right)) {
+                value = true;
+            } else {
+                value = false;
+            }
+            break;
+        case MULTIPLICATION:
+            node.getLeftOperand().accept(this);
+            left = value;
+            node.getRightOperand().accept(this);
+            right = value;
+            value = (int) left * (int) right;
+            break;
+        case DIVISION:
+            node.getLeftOperand().accept(this);
+            left = value;
+            node.getRightOperand().accept(this);
+            right = value;
+            value = (int) left / (int) right;
+            break;
         default:
             value = null;
             break;
-                
         }
     }
 
     @Override
     public void visit(UnaryOperatorNode node) {
         // TODO Auto-generated method stub
+    }
 
+    @Override
+    public void visit(IfNode node) {
+        Map<IExpressionNode, GroupNode> ifs = node.getIfs();
+        for (IExpressionNode key : ifs.keySet()) {
+            key.accept(this);
+            if (this.value.equals(true)) {
+                ifs.get(key).accept(this);
+                break;
+            } else {
+                node.getElseExpression().accept(this);
+            }
+        }
+    }
+
+    @Override
+    public void visit(InvocationNode node) {
+        try {
+            List<IExpressionNode> exprs = node.getParams();
+            Object[] args = new Object[exprs.size()];
+            for (int i = 0; i < exprs.size(); i++) {
+                exprs.get(i).accept(this);
+                args[i] = this.value;
+            }
+            IPlugin module = manager.getPlugin(node.getPluginAlias());
+            this.value = module.callFunction(node.getMethod(), args);
+        } catch (NoSuchPluginException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

@@ -6,7 +6,7 @@ public class TestModule {
         return "foo";
     }
     
-    public String bar(int a) {
+    public String bar(Integer a) {
         return "bar " + a;
     }
 

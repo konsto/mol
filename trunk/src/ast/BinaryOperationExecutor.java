@@ -2,6 +2,7 @@ package ast;
 
 import exceptions.BadOperandsForOperationException;
 import exceptions.DifferentTypesArgumentsException;
+import exceptions.NoSuchOperatorException;
 
 public class BinaryOperationExecutor implements OperationExecutor {
 
@@ -17,7 +18,7 @@ public class BinaryOperationExecutor implements OperationExecutor {
 
     @Override
     public Object executeOperation() throws Exception {
-
+        // TODO: Dodac obsluge typow zdefiniowanych przez klienta
         switch (operator) {
         case ADDITION:
             if (areNumbers()) {
@@ -39,26 +40,77 @@ public class BinaryOperationExecutor implements OperationExecutor {
             } else {
                 throw new BadOperandsForOperationException();
             }
-            // case MULTIPLICATION:
-            // break;
-            // case DIVISION:
-            // break;
-            // case BASIC_ASSIGMENT:
-            // break;
-            // case EQUAL__TO:
-            // break;
-            // case GREATER_THAN:
-            // break;
-            // case GREATER_THAN_OR_EQUAL_TO:
-            // break;
-            // case LESS_THAN:
-            // break;
-            // case LESS_THAN_OR_EQUAL_TO:
-            // break;
-            // case NOT_EQUAL_TO:
-            // break;
+        case MULTIPLICATION:
+            if (areNumbers()) {
+                double temp1 = Double.parseDouble(left.toString());
+                double temp2 = Double.parseDouble(right.toString());
+                return temp1 * temp2;
+            } else {
+                throw new BadOperandsForOperationException();
+            }
+        case DIVISION:
+            if (areNumbers()) {
+                double temp1 = Double.parseDouble(left.toString());
+                double temp2 = Double.parseDouble(right.toString());
+                return temp1 / temp2;
+            } else {
+                throw new BadOperandsForOperationException();
+            }
+        case EQUAL__TO:
+            if (areNumbers()) {
+                double temp1 = Double.parseDouble(left.toString());
+                double temp2 = Double.parseDouble(right.toString());
+                return temp1 == temp2;
+            } else if (areStrings()) {
+                System.out.println(left.toString());
+                return left.toString().equals(right.toString());
+            } else {
+                throw new BadOperandsForOperationException();
+            }
+        case GREATER_THAN:
+            if (areNumbers()) {
+                double temp1 = Double.parseDouble(left.toString());
+                double temp2 = Double.parseDouble(right.toString());
+                return temp1 > temp2;
+            } else {
+                throw new BadOperandsForOperationException();
+            }
+        case GREATER_THAN_OR_EQUAL_TO:
+            if (areNumbers()) {
+                double temp1 = Double.parseDouble(left.toString());
+                double temp2 = Double.parseDouble(right.toString());
+                return temp1 >= temp2;
+            } else {
+                throw new BadOperandsForOperationException();
+            }
+        case LESS_THAN:
+            if (areNumbers()) {
+                double temp1 = Double.parseDouble(left.toString());
+                double temp2 = Double.parseDouble(right.toString());
+                return temp1 < temp2;
+            } else {
+                throw new BadOperandsForOperationException();
+            }
+        case LESS_THAN_OR_EQUAL_TO:
+            if (areNumbers()) {
+                double temp1 = Double.parseDouble(left.toString());
+                double temp2 = Double.parseDouble(right.toString());
+                return temp1 <= temp2;
+            } else {
+                throw new BadOperandsForOperationException();
+            }
+        case NOT_EQUAL_TO:
+            if (areNumbers()) {
+                double temp1 = Double.parseDouble(left.toString());
+                double temp2 = Double.parseDouble(right.toString());
+                return temp1 != temp2;
+            } else if (areStrings()) {
+                return left.toString() != right.toString();
+            } else {
+                throw new BadOperandsForOperationException();
+            }
         default:
-            return null;
+            throw new NoSuchOperatorException();
         }
 
     }

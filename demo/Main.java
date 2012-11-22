@@ -69,12 +69,13 @@ public class Main {
 //        ifs.put(ifCondition, ifCodeBlock);
 //        IfNode ifnode = new IfNode(ifs, elseExpression);
 
-        BinaryOperatorNode add1 = new BinaryOperatorNode(new LiteralNode(12.0),
-                new LiteralNode(1), BinaryOperatorType.SUBSTRACTION);
+        BinaryOperatorNode add1 = new BinaryOperatorNode(new LiteralNode("aa"),
+                new LiteralNode("a"), BinaryOperatorType.NOT_EQUAL_TO);
         root.addChild(new BinaryOperatorNode(new LiteralNode("test1"), add1,
                 BinaryOperatorType.BASIC_ASSIGMENT));
         
 //        root.addChild(ifnode);
+        System.out.println("a" == "a");
         root.accept(visitor);
         visitor.printContext();
         

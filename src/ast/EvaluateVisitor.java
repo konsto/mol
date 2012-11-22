@@ -27,7 +27,6 @@ public class EvaluateVisitor implements IVisitor {
         manager = temp;
     }
 
-
     public Object getValue() {
         return this.value;
     }
@@ -97,72 +96,21 @@ public class EvaluateVisitor implements IVisitor {
         Object right = null;
         BinaryOperatorType operator = node.getOperator();
         BinaryOperationExecutor executor = new BinaryOperationExecutor();
-        switch (operator) {
-        case ADDITION:
-            node.getLeftOperand().accept(this);
-            left = value;
-            node.getRightOperand().accept(this);
-            right = value;
-            executor.set(left, right, operator);
-            try {
-                value = executor.executeOperation();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } 
-//            if (Number.class.isAssignableFrom(left.getClass())
-//                    && Number.class.isAssignableFrom(right.getClass())) {
-//                value = (int) left + (int) right;
-//            }
-            break;
-        case SUBSTRACTION:
-            node.getLeftOperand().accept(this);
-            left = value;
-            node.getRightOperand().accept(this);
-            right = value;
-            executor.set(left, right, operator);
-            try {
-                value = executor.executeOperation();
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } 
-        case BASIC_ASSIGMENT:
-            node.getLeftOperand().accept(this);
-            left = value;
-            node.getRightOperand().accept(this);
-            right = value;
-            System.out.println(right.getClass() + " OOO " + right);
+        node.getLeftOperand().accept(this);
+        left = value;
+        node.getRightOperand().accept(this);
+        right = value;
+        if (operator.equals(BinaryOperatorType.BASIC_ASSIGMENT)) {
             context.put(left.toString(), right);
-            break;
-//        case EQUAL__TO:
-//            node.getLeftOperand().accept(this);
-//            left = value;
-//            node.getRightOperand().accept(this);
-//            right = value;
-//            if (left.equals(right)) {
-//                value = true;
-//            } else {
-//                value = false;
-//            }
-//            break;
-//        case MULTIPLICATION:
-//            node.getLeftOperand().accept(this);
-//            left = value;
-//            node.getRightOperand().accept(this);
-//            right = value;
-//            value = (int) left * (int) right;
-//            break;
-//        case DIVISION:
-//            node.getLeftOperand().accept(this);
-//            left = value;
-//            node.getRightOperand().accept(this);
-//            right = value;
-//            value = (int) left / (int) right;
-//            break;
-        default:
-            value = null;
-            break;
+        } else {
+
+            executor.set(left, right, operator);
+            try {
+                value = executor.executeOperation();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 

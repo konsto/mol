@@ -1,14 +1,14 @@
 package ast;
 
 import exceptions.BadOperandsForOperationException;
-import exceptions.DifferentTypesArgumentsException;
+import exceptions.DivideByZeroException;
 import exceptions.NoSuchOperatorException;
 
 public class BinaryOperationExecutor implements OperationExecutor {
 
     private Object left;
     private Object right;
-    BinaryOperatorType operator;
+    private BinaryOperatorType operator;
 
     public void set(Object left, Object right, BinaryOperatorType operator) {
         this.left = left;
@@ -48,10 +48,17 @@ public class BinaryOperationExecutor implements OperationExecutor {
             } else {
                 throw new BadOperandsForOperationException();
             }
+            //TODO Przy dzieleniu przez 0 leci wyjatek, ale jesli
+            //wynik dzielenia jest przypisywany do zmiennej,
+            //to zmienna ta wpisuje sie do kontekstu z niezidentyfikowana
+            //wartoscia
         case DIVISION:
             if (areNumbers()) {
                 double temp1 = Double.parseDouble(left.toString());
                 double temp2 = Double.parseDouble(right.toString());
+                if (temp2 == 0) {
+                    throw new DivideByZeroException();
+                }
                 return temp1 / temp2;
             } else {
                 throw new BadOperandsForOperationException();

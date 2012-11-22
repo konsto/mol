@@ -17,8 +17,6 @@ public class EvaluateVisitor implements IVisitor {
     private Object value;
     private Map<String, Object> context;
     private IPluginManager manager;
-    private OperationExecutor binaryExecutor;
-    private OperationExecutor unaryExecutor;
 
     public EvaluateVisitor() {
         context = new HashMap<String, Object>();
@@ -117,46 +115,56 @@ public class EvaluateVisitor implements IVisitor {
     @Override
     public void visit(UnaryOperatorNode node) {
         UnaryOperatorType operator = node.getOperator();
-        int operand;
-
-        switch (operator) {
-        case INCREMENT:
-            node.getOperand().accept(this);
-            operand = (int) value;
-            operand++;
-            value = operand;
-            break;
-        // TODO: check if this is used properly
-        case BITWISE_NOT:
-            node.getOperand().accept(this);
-            value = ~(Integer) value;
-            break;
-        case DECREMENT:
-            node.getOperand().accept(this);
-            operand = (int) value;
-            operand--;
-            value = operand;
-            break;
-        case LOGICAL_NEGATION:
-            node.getOperand().accept(this);
-            value = !(boolean) value;
-            break;
-        case UNARY_MINUS:
-            node.getOperand().accept(this);
-            operand = (int) value;
-            operand = -operand;
-            value = operand;
-            break;
-        case UNARY_PLUS:
-            node.getOperand().accept(this);
-            operand = (int) value;
-            operand = +operand;
-            value = operand;
-            break;
-        default:
-            break;
-
+        node.getOperand().accept(this);
+        Object operand = value;
+        UnaryOperationExecutor executor = new UnaryOperationExecutor();
+        executor.set(operand, operator);
+        try {
+            value = executor.executeOperation();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
+
+//        int operand;
+//        switch (operator) {
+//        case INCREMENT:
+//            node.getOperand().accept(this);
+//            operand = (int) value;
+//            operand++;
+//            value = operand;
+//            break;
+//        // TODO: check if this is used properly
+//        case BITWISE_NOT:
+//            node.getOperand().accept(this);
+//            value = ~(Integer) value;
+//            break;
+//        case DECREMENT:
+//            node.getOperand().accept(this);
+//            operand = (int) value;
+//            operand--;
+//            value = operand;
+//            break;
+//        case LOGICAL_NEGATION:
+//            node.getOperand().accept(this);
+//            value = !(boolean) value;
+//            break;
+//        case UNARY_MINUS:
+//            node.getOperand().accept(this);
+//            operand = (int) value;
+//            operand = -operand;
+//            value = operand;
+//            break;
+//        case UNARY_PLUS:
+//            node.getOperand().accept(this);
+//            operand = (int) value;
+//            operand = +operand;
+//            value = operand;
+//            break;
+//        default:
+//            break;
+//
+//        }
 
     }
 

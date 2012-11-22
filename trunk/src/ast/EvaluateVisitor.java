@@ -1,28 +1,51 @@
 package ast;
 
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.hamcrest.core.IsInstanceOf;
-
+import exceptions.NoSuchExecutorException;
 import exceptions.NoSuchPluginException;
+
 import plugin.IPlugin;
 import plugin.IPluginManager;
 import plugin.PluginFactory;
 import plugin.PluginManager;
 
 public class EvaluateVisitor implements IVisitor {
-
     private Object value;
     private Map<String, Object> context;
     private IPluginManager manager;
+    private Map<BinaryOperatorType, AbstractBinaryOperationExecutor> binaryExecutors;
+    private Map<UnaryOperatorType, AbstractUnaryOperationExecutor> unaryExecutors;
 
     public EvaluateVisitor() {
         context = new HashMap<String, Object>();
         PluginManager temp = new PluginManager();
         temp.addFactory(new PluginFactory());
         manager = temp;
+        binaryExecutors = new HashMap<BinaryOperatorType, AbstractBinaryOperationExecutor>();
+        unaryExecutors = new HashMap<UnaryOperatorType, AbstractUnaryOperationExecutor>();
+        setUp();
+    }
+
+    public AbstractBinaryOperationExecutor findBinaryExecutor(
+            BinaryOperatorType operator) throws Exception {
+        AbstractBinaryOperationExecutor executor = binaryExecutors
+                .get(operator);
+        if (executor == null) {
+            throw new NoSuchExecutorException();
+        }
+        return executor;
+    }
+
+    public AbstractUnaryOperationExecutor findUnaryExecutor(
+            UnaryOperatorType operator) throws Exception {
+        AbstractUnaryOperationExecutor executor = unaryExecutors.get(operator);
+        if (executor == null) {
+            throw new NoSuchExecutorException();
+        }
+        return executor;
     }
 
     public Object getValue() {
@@ -42,16 +65,19 @@ public class EvaluateVisitor implements IVisitor {
     @Override
     public void visit(INode node) {
         // TODO Auto-generated method stub
+
     }
 
     @Override
     public void visit(IExpressionNode node) {
         // TODO Auto-generated method stub
+
     }
 
     @Override
     public void visit(CommentNode node) {
         // TODO Auto-generated method stub
+
     }
 
     @Override
@@ -62,6 +88,7 @@ public class EvaluateVisitor implements IVisitor {
             child.accept(this);
             iterator.next();
         }
+
     }
 
     @Override
@@ -72,11 +99,13 @@ public class EvaluateVisitor implements IVisitor {
         } catch (Exception e) {
             value = false;
         }
+
     }
 
     @Override
     public void visit(LiteralNode node) {
         value = node.getValue();
+
     }
 
     @Override
@@ -86,86 +115,42 @@ public class EvaluateVisitor implements IVisitor {
             throw new RuntimeException();
         }
         this.value = temp;
+
     }
 
     @Override
     public void visit(BinaryOperatorNode node) {
-        Object left = null;
-        Object right = null;
-        BinaryOperatorType operator = node.getOperator();
-        BinaryOperationExecutor executor = new BinaryOperationExecutor();
         node.getLeftOperand().accept(this);
-        left = value;
+        Object left = value;
         node.getRightOperand().accept(this);
-        right = value;
+        Object right = value;
+        BinaryOperatorType operator = node.getOperator();
         if (operator.equals(BinaryOperatorType.BASIC_ASSIGMENT)) {
             context.put(left.toString(), right);
         } else {
-
-            executor.set(left, right, operator);
             try {
-                value = executor.executeOperation();
+                AbstractBinaryOperationExecutor executor = findBinaryExecutor(operator);
+                value = executor.execute(left, right);
             } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
+
     }
 
     @Override
     public void visit(UnaryOperatorNode node) {
-        UnaryOperatorType operator = node.getOperator();
         node.getOperand().accept(this);
         Object operand = value;
-        UnaryOperationExecutor executor = new UnaryOperationExecutor();
-        executor.set(operand, operator);
+        UnaryOperatorType operator = node.getOperator();
         try {
-            value = executor.executeOperation();
+            AbstractUnaryOperationExecutor executor = findUnaryExecutor(operator);
+            value = executor.execute(operand);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-//        int operand;
-//        switch (operator) {
-//        case INCREMENT:
-//            node.getOperand().accept(this);
-//            operand = (int) value;
-//            operand++;
-//            value = operand;
-//            break;
-//        // TODO: check if this is used properly
-//        case BITWISE_NOT:
-//            node.getOperand().accept(this);
-//            value = ~(Integer) value;
-//            break;
-//        case DECREMENT:
-//            node.getOperand().accept(this);
-//            operand = (int) value;
-//            operand--;
-//            value = operand;
-//            break;
-//        case LOGICAL_NEGATION:
-//            node.getOperand().accept(this);
-//            value = !(boolean) value;
-//            break;
-//        case UNARY_MINUS:
-//            node.getOperand().accept(this);
-//            operand = (int) value;
-//            operand = -operand;
-//            value = operand;
-//            break;
-//        case UNARY_PLUS:
-//            node.getOperand().accept(this);
-//            operand = (int) value;
-//            operand = +operand;
-//            value = operand;
-//            break;
-//        default:
-//            break;
-//
-//        }
-
     }
 
     @Override
@@ -200,5 +185,37 @@ public class EvaluateVisitor implements IVisitor {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    private void setUp() {
+        binaryExecutors
+                .put(BinaryOperatorType.ADDITION, new AdditionExecutor());
+        binaryExecutors.put(BinaryOperatorType.SUBSTRACTION,
+                new SubtractionExecutor());
+        binaryExecutors.put(BinaryOperatorType.MULTIPLICATION,
+                new MultiplicationExecutor());
+        binaryExecutors
+                .put(BinaryOperatorType.DIVISION, new DivisionExecutor());
+        binaryExecutors
+                .put(BinaryOperatorType.EQUAL__TO, new EqualToExecutor());
+        binaryExecutors.put(BinaryOperatorType.GREATER_THAN,
+                new GreaterThanExecutor());
+        binaryExecutors.put(BinaryOperatorType.GREATER_THAN_OR_EQUAL_TO,
+                new GreaterThanOrEqualToExecutor());
+        binaryExecutors.put(BinaryOperatorType.LESS_THAN,
+                new LessThanExecutor());
+        binaryExecutors.put(BinaryOperatorType.LESS_THAN_OR_EQUAL_TO,
+                new LessThanOrEqualToExecutor());
+        binaryExecutors.put(BinaryOperatorType.NOT_EQUAL_TO,
+                new NotEqualToExecutor());
+
+        unaryExecutors
+                .put(UnaryOperatorType.DECREMENT, new DecrementExecutor());
+        unaryExecutors
+                .put(UnaryOperatorType.INCREMENT, new IncrementExecutor());
+        unaryExecutors.put(UnaryOperatorType.LOGICAL_NEGATION,
+                new LogicalNegationExecutor());
+        unaryExecutors.put(UnaryOperatorType.UNARY_MINUS,
+                new MinusExecutor());
     }
 }

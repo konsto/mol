@@ -1,7 +1,3 @@
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 import ast.BinaryOperatorNode;
 import ast.BinaryOperatorType;
@@ -73,10 +69,10 @@ public class Main {
         // IfNode ifnode = new IfNode(ifs, elseExpression);
 
         BinaryOperatorNode add1 = new BinaryOperatorNode(new LiteralNode(35),
-                new LiteralNode(2), BinaryOperatorType.SUBSTRACTION);
+                new LiteralNode(2), BinaryOperatorType.DIVISION);
         root.addChild(new BinaryOperatorNode(new LiteralNode("test1"), add1,
                 BinaryOperatorType.BASIC_ASSIGMENT));
-
+        
         UnaryOperatorNode test2 = new UnaryOperatorNode(new LiteralNode(5),
                 UnaryOperatorType.UNARY_MINUS);
         root.addChild(new BinaryOperatorNode(new LiteralNode("test2"), test2,

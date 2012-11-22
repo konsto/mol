@@ -3,6 +3,9 @@ package ast;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.hamcrest.core.IsInstanceOf;
+
 import exceptions.NoSuchPluginException;
 import plugin.IPlugin;
 import plugin.IPluginManager;
@@ -14,6 +17,8 @@ public class EvaluateVisitor implements IVisitor {
     private Object value;
     private Map<String, Object> context;
     private IPluginManager manager;
+    private OperationExecutor binaryExecutor;
+    private OperationExecutor unaryExecutor;
 
     public EvaluateVisitor() {
         context = new HashMap<String, Object>();
@@ -21,6 +26,7 @@ public class EvaluateVisitor implements IVisitor {
         temp.addFactory(new PluginFactory());
         manager = temp;
     }
+
 
     public Object getValue() {
         return this.value;
@@ -69,7 +75,7 @@ public class EvaluateVisitor implements IVisitor {
         } catch (Exception e) {
             value = false;
         }
-}
+    }
 
     @Override
     public void visit(LiteralNode node) {
@@ -90,53 +96,70 @@ public class EvaluateVisitor implements IVisitor {
         Object left = null;
         Object right = null;
         BinaryOperatorType operator = node.getOperator();
+        BinaryOperationExecutor executor = new BinaryOperationExecutor();
         switch (operator) {
         case ADDITION:
             node.getLeftOperand().accept(this);
             left = value;
             node.getRightOperand().accept(this);
             right = value;
-            value = (int) left + (int) right;
+            executor.set(left, right, operator);
+            try {
+                value = executor.executeOperation();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } 
+//            if (Number.class.isAssignableFrom(left.getClass())
+//                    && Number.class.isAssignableFrom(right.getClass())) {
+//                value = (int) left + (int) right;
+//            }
             break;
         case SUBSTRACTION:
             node.getLeftOperand().accept(this);
             left = value;
             node.getRightOperand().accept(this);
             right = value;
-            value = (int) left - (int) right;
-            break;
+            executor.set(left, right, operator);
+            try {
+                value = executor.executeOperation();
+            } catch (Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } 
         case BASIC_ASSIGMENT:
             node.getLeftOperand().accept(this);
             left = value;
             node.getRightOperand().accept(this);
             right = value;
-            context.put((String) left, right);
+            System.out.println(right.getClass() + " OOO " + right);
+            context.put(left.toString(), right);
             break;
-        case EQUAL__TO:
-            node.getLeftOperand().accept(this);
-            left = value;
-            node.getRightOperand().accept(this);
-            right = value;
-            if (left.equals(right)) {
-                value = true;
-            } else {
-                value = false;
-            }
-            break;
-        case MULTIPLICATION:
-            node.getLeftOperand().accept(this);
-            left = value;
-            node.getRightOperand().accept(this);
-            right = value;
-            value = (int) left * (int) right;
-            break;
-        case DIVISION:
-            node.getLeftOperand().accept(this);
-            left = value;
-            node.getRightOperand().accept(this);
-            right = value;
-            value = (int) left / (int) right;
-            break;
+//        case EQUAL__TO:
+//            node.getLeftOperand().accept(this);
+//            left = value;
+//            node.getRightOperand().accept(this);
+//            right = value;
+//            if (left.equals(right)) {
+//                value = true;
+//            } else {
+//                value = false;
+//            }
+//            break;
+//        case MULTIPLICATION:
+//            node.getLeftOperand().accept(this);
+//            left = value;
+//            node.getRightOperand().accept(this);
+//            right = value;
+//            value = (int) left * (int) right;
+//            break;
+//        case DIVISION:
+//            node.getLeftOperand().accept(this);
+//            left = value;
+//            node.getRightOperand().accept(this);
+//            right = value;
+//            value = (int) left / (int) right;
+//            break;
         default:
             value = null;
             break;
@@ -145,7 +168,48 @@ public class EvaluateVisitor implements IVisitor {
 
     @Override
     public void visit(UnaryOperatorNode node) {
-        // TODO Auto-generated method stub
+        UnaryOperatorType operator = node.getOperator();
+        int operand;
+
+        switch (operator) {
+        case INCREMENT:
+            node.getOperand().accept(this);
+            operand = (int) value;
+            operand++;
+            value = operand;
+            break;
+        // TODO: check if this is used properly
+        case BITWISE_NOT:
+            node.getOperand().accept(this);
+            value = ~(Integer) value;
+            break;
+        case DECREMENT:
+            node.getOperand().accept(this);
+            operand = (int) value;
+            operand--;
+            value = operand;
+            break;
+        case LOGICAL_NEGATION:
+            node.getOperand().accept(this);
+            value = !(boolean) value;
+            break;
+        case UNARY_MINUS:
+            node.getOperand().accept(this);
+            operand = (int) value;
+            operand = -operand;
+            value = operand;
+            break;
+        case UNARY_PLUS:
+            node.getOperand().accept(this);
+            operand = (int) value;
+            operand = +operand;
+            value = operand;
+            break;
+        default:
+            break;
+
+        }
+
     }
 
     @Override

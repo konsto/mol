@@ -10,7 +10,7 @@ public class Dog {
     }
 
     public Dog() {
-        this("Unknown");
+        this("Misiek");
     }
 
     public void bark() {
@@ -23,5 +23,9 @@ public class Dog {
 
     public Number getNumber() {
         return this.number;
+    }
+    
+    public String present() {
+        return new String("Jestem psem. Nazywam sie " + this.name);
     }
 }

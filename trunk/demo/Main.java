@@ -120,7 +120,7 @@ public class Main {
         
         List<IExpressionNode> params3 = new LinkedList<IExpressionNode>();
         UserObjectMethodInvocationNode test1 = new UserObjectMethodInvocationNode(
-                "dog", "getNumber", params3);
+                "dog", "present", params3);
 
         BinaryOperatorNode assigment3 = new BinaryOperatorNode(new LiteralNode(
                 "wynikFunkcji"), test1, BinaryOperatorType.BASIC_ASSIGMENT);

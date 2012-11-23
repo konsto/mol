@@ -3,6 +3,7 @@ package ast;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import exceptions.NoSuchExecutorException;
 import exceptions.NoSuchPluginException;
@@ -27,6 +28,14 @@ public class EvaluateVisitor implements IVisitor {
         binaryExecutors = new HashMap<BinaryOperatorType, AbstractBinaryOperationExecutor>();
         unaryExecutors = new HashMap<UnaryOperatorType, AbstractUnaryOperationExecutor>();
         setUp();
+    }
+
+    public Object getContextValue(String key) {
+        if (context.containsKey(key)) {
+            return context.get(key);
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
     public AbstractBinaryOperationExecutor findBinaryExecutor(
@@ -104,7 +113,11 @@ public class EvaluateVisitor implements IVisitor {
 
     @Override
     public void visit(LiteralNode node) {
-        value = node.getValue();
+        Object temp = node.getValue();
+        if (Number.class.isAssignableFrom(temp.getClass())) {
+            temp = Double.parseDouble(temp.toString());
+        }
+        value = temp;
 
     }
 
@@ -126,7 +139,12 @@ public class EvaluateVisitor implements IVisitor {
         Object right = value;
         BinaryOperatorType operator = node.getOperator();
         if (operator.equals(BinaryOperatorType.BASIC_ASSIGMENT)) {
-            context.put(left.toString(), right);
+            if (isPrimitive(right)) {
+                context.put(left.toString(), right);
+            } else {
+                context.put(left.toString(), new UserObject(right));
+            }
+
         } else {
             try {
                 AbstractBinaryOperationExecutor executor = findBinaryExecutor(operator);
@@ -187,6 +205,35 @@ public class EvaluateVisitor implements IVisitor {
         }
     }
 
+    @Override
+    public void visit(UserObjectMethodInvocationNode node) {
+        List<IExpressionNode> exprs = node.getParams();
+        Object[] args = new Object[exprs.size()];
+        for (int i = 0; i < exprs.size(); i++) {
+            exprs.get(i).accept(this);
+            args[i] = this.value;
+        }
+        UserObject instance = (UserObject) this.context.get(node
+                .getObjectVariable());
+        try {
+            this.value = instance.callFunction(node.getMethod(), args);
+        } catch (NoSuchMethodException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    private boolean isPrimitive(Object object) {
+        Class type = object.getClass();
+        if ((Number.class.isAssignableFrom(type))
+                || (type.equals(String.class)) || (type.equals(Boolean.class))) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private void setUp() {
         binaryExecutors
                 .put(BinaryOperatorType.ADDITION, new AdditionExecutor());
@@ -215,7 +262,6 @@ public class EvaluateVisitor implements IVisitor {
                 .put(UnaryOperatorType.INCREMENT, new IncrementExecutor());
         unaryExecutors.put(UnaryOperatorType.LOGICAL_NEGATION,
                 new LogicalNegationExecutor());
-        unaryExecutors.put(UnaryOperatorType.UNARY_MINUS,
-                new MinusExecutor());
+        unaryExecutors.put(UnaryOperatorType.UNARY_MINUS, new MinusExecutor());
     }
 }

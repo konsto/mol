@@ -59,4 +59,10 @@ public class TestVisitor implements IVisitor {
         this.message = "InvocationNode";
         
     }
+
+    @Override
+    public void visit(UserObjectMethodInvocationNode node) {
+        this.message = "UserObjectMethodInvocationNode";
+        
+    }
 }

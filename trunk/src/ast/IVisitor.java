@@ -23,5 +23,7 @@ public interface IVisitor {
     public void visit(IfNode node);
     
     public void visit(InvocationNode node);
+    
+    public void visit(UserObjectMethodInvocationNode node);
 
 }

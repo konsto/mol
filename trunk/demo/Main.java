@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.List;
 
 import ast.BinaryOperatorNode;
 import ast.BinaryOperatorType;
@@ -67,18 +69,32 @@ public class Main {
         // "b"), new LiteralNode(1), BinaryOperatorType.EQUAL__TO);
         // ifs.put(ifCondition, ifCodeBlock);
         // IfNode ifnode = new IfNode(ifs, elseExpression);
-
-        BinaryOperatorNode add1 = new BinaryOperatorNode(new LiteralNode(35),
-                new LiteralNode(2), BinaryOperatorType.DIVISION);
-        root.addChild(new BinaryOperatorNode(new LiteralNode("test1"), add1,
-                BinaryOperatorType.BASIC_ASSIGMENT));
-        
-        UnaryOperatorNode test2 = new UnaryOperatorNode(new LiteralNode(5),
-                UnaryOperatorType.UNARY_MINUS);
-        root.addChild(new BinaryOperatorNode(new LiteralNode("test2"), test2,
-                BinaryOperatorType.BASIC_ASSIGMENT));
-
+        // BinaryOperatorNode add1 = new BinaryOperatorNode(new LiteralNode(35),
+        // new LiteralNode(2), BinaryOperatorType.DIVISION);
+        // root.addChild(new BinaryOperatorNode(new LiteralNode("test1"), add1,
+        // BinaryOperatorType.BASIC_ASSIGMENT));
+        //
+        // UnaryOperatorNode test2 = new UnaryOperatorNode(new LiteralNode(5),
+        // UnaryOperatorType.UNARY_MINUS);
+        // root.addChild(new BinaryOperatorNode(new LiteralNode("test2"), test2,
+        // BinaryOperatorType.BASIC_ASSIGMENT));
         // root.addChild(ifnode);
+
+        
+        ImportNode importNode = new ImportNode("test_plugins.DogFactory", "df");
+        
+        List<IExpressionNode> params = new LinkedList<IExpressionNode>();
+        //params.add(new LiteralNode("Misiek"));
+        
+        InvocationNode invocationNode = new InvocationNode("df", "getDog",
+                params);
+        
+        BinaryOperatorNode assigmentNode = new BinaryOperatorNode(
+                new LiteralNode("dog"), invocationNode,
+        
+                BinaryOperatorType.BASIC_ASSIGMENT);
+        root.addChild(importNode);
+        root.addChild(assigmentNode);
         root.accept(visitor);
         visitor.printContext();
     }

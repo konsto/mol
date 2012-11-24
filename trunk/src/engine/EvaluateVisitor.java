@@ -1,9 +1,26 @@
-package ast;
+package engine;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+
+import ast.BinaryOperatorNode;
+import ast.BinaryOperatorType;
+import ast.CommentNode;
+import ast.GroupNode;
+import ast.IExpressionNode;
+import ast.INode;
+import ast.INodeIterator;
+import ast.IVisitor;
+import ast.IfNode;
+import ast.ImportNode;
+import ast.InvocationNode;
+import ast.LiteralNode;
+import ast.UnaryOperatorNode;
+import ast.UnaryOperatorType;
+import ast.UserObjectMethodInvocationNode;
+import ast.VariableNode;
 
 import exceptions.NoSuchExecutorException;
 import exceptions.NoSuchPluginException;
@@ -138,7 +155,7 @@ public class EvaluateVisitor implements IVisitor {
         node.getRightOperand().accept(this);
         Object right = value;
         BinaryOperatorType operator = node.getOperator();
-        if (operator.equals(BinaryOperatorType.BASIC_ASSIGMENT)) {
+        if (operator.equals(BinaryOperatorType.ASSIGMENT)) {
             if (isPrimitive(right)) {
                 context.put(left.toString(), right);
             } else {
@@ -205,6 +222,8 @@ public class EvaluateVisitor implements IVisitor {
         }
     }
 
+    // TODO: wszystko co wrzucam do contextu opakkowuej w IOBJECT, Ktory ma
+    // invokeMethod
     @Override
     public void visit(UserObjectMethodInvocationNode node) {
         List<IExpressionNode> exprs = node.getParams();
@@ -216,6 +235,7 @@ public class EvaluateVisitor implements IVisitor {
         UserObject instance = (UserObject) this.context.get(node
                 .getObjectVariable());
         try {
+            // TODO: zmienic callFunction na invokeMethod
             this.value = instance.callFunction(node.getMethod(), args);
         } catch (NoSuchMethodException e) {
             // TODO Auto-generated catch block

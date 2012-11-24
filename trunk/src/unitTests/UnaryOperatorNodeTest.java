@@ -4,9 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import engine.TestVisitor;
+
 import ast.IExpressionNode;
 import ast.LiteralNode;
-import ast.TestVisitor;
 import ast.UnaryOperatorNode;
 import ast.UnaryOperatorType;
 

@@ -1,6 +1,5 @@
-package ast;
+package engine;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class UserObject {
@@ -9,14 +8,13 @@ public class UserObject {
     public UserObject(Object target) {
         this.target = target;
     }
-
+//TODO: zmienic na invokeMethod
     public Object callFunction(String methodName, Object... args)
             throws NoSuchMethodException {
 
         Class[] givenParametersTypes = new Class[args.length];
         for (int i = 0; i < args.length; i++) {
             givenParametersTypes[i] = args[i].getClass();
-            System.out.println(givenParametersTypes[i]);
         }
         Method method = target.getClass().getMethod(methodName,
                 givenParametersTypes);

@@ -3,7 +3,8 @@ package unitTests;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import ast.TestVisitor;
+
+import engine.TestVisitor;
 import ast.GroupNode;
 import ast.INode;
 import ast.ImportNode;

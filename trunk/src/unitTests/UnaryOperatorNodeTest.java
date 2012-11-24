@@ -16,7 +16,7 @@ public class UnaryOperatorNodeTest {
     @Test
     public void testGetting() {
         IExpressionNode operand = new LiteralNode(1);
-        UnaryOperatorType operator = UnaryOperatorType.LOGICAL_NEGATION;
+        UnaryOperatorType operator = UnaryOperatorType.NEGATION;
         UnaryOperatorNode node = new UnaryOperatorNode(operand, operator);
         assertEquals(operand, node.getOperand());
         assertEquals(operator, node.getOperator());
@@ -25,7 +25,7 @@ public class UnaryOperatorNodeTest {
     @Test
     public void testAccept() {
         IExpressionNode operand = new LiteralNode(1);
-        UnaryOperatorType operator = UnaryOperatorType.LOGICAL_NEGATION;
+        UnaryOperatorType operator = UnaryOperatorType.NEGATION;
         UnaryOperatorNode node = new UnaryOperatorNode(operand, operator);
         TestVisitor visitor = new TestVisitor();
         node.accept(visitor);

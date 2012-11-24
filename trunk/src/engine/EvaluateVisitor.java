@@ -256,32 +256,32 @@ public class EvaluateVisitor implements IVisitor {
 
     private void setUp() {
         binaryExecutors
-                .put(BinaryOperatorType.ADDITION, new AdditionExecutor());
+                .put(BinaryOperatorType.ADDITION, new AdditionEvaluator());
         binaryExecutors.put(BinaryOperatorType.SUBSTRACTION,
-                new SubtractionExecutor());
+                new SubtractionEvaluator());
         binaryExecutors.put(BinaryOperatorType.MULTIPLICATION,
-                new MultiplicationExecutor());
+                new MultiplicationEvaluator());
         binaryExecutors
-                .put(BinaryOperatorType.DIVISION, new DivisionExecutor());
+                .put(BinaryOperatorType.DIVISION, new DivisionEvaluator());
         binaryExecutors
-                .put(BinaryOperatorType.EQUAL__TO, new EqualToExecutor());
+                .put(BinaryOperatorType.EQUAL__TO, new EqualToEvaluator());
         binaryExecutors.put(BinaryOperatorType.GREATER_THAN,
-                new GreaterThanExecutor());
+                new GreaterThanEvaluator());
         binaryExecutors.put(BinaryOperatorType.GREATER_THAN_OR_EQUAL_TO,
-                new GreaterThanOrEqualToExecutor());
+                new GreaterThanOrEqualToEvaluator());
         binaryExecutors.put(BinaryOperatorType.LESS_THAN,
-                new LessThanExecutor());
+                new LessThanEvaluator());
         binaryExecutors.put(BinaryOperatorType.LESS_THAN_OR_EQUAL_TO,
-                new LessThanOrEqualToExecutor());
+                new LessThanOrEqualToEvaluator());
         binaryExecutors.put(BinaryOperatorType.NOT_EQUAL_TO,
-                new NotEqualToExecutor());
+                new NotEqualToEvaluator());
 
         unaryExecutors
-                .put(UnaryOperatorType.DECREMENT, new DecrementExecutor());
+                .put(UnaryOperatorType.DECREMENT, new DecrementEvaluator());
         unaryExecutors
                 .put(UnaryOperatorType.INCREMENT, new IncrementExecutor());
-        unaryExecutors.put(UnaryOperatorType.LOGICAL_NEGATION,
-                new LogicalNegationExecutor());
-        unaryExecutors.put(UnaryOperatorType.UNARY_MINUS, new MinusExecutor());
+        unaryExecutors.put(UnaryOperatorType.NEGATION,
+                new NegationEvaluator());
+        unaryExecutors.put(UnaryOperatorType.MINUS, new MinusEvaluator());
     }
 }

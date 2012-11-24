@@ -4,7 +4,18 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import annotations.Addition;
+import annotations.Division;
 import annotations.EqualTo;
+import annotations.GreaterThan;
+import annotations.GreaterThanOrEqualTo;
+import annotations.LessThan;
+import annotations.LessThanOrEqualTo;
+import annotations.Minus;
+import annotations.Modulo;
+import annotations.Multiplication;
+import annotations.Negation;
+import annotations.NotEqualTo;
+import annotations.Subtraction;
 import annotations.Type;
 import annotations.Value;
 
@@ -28,22 +39,12 @@ public class ObjectWrapper implements IObject {
 
     @Override
     public IObject add(IObject object) throws Exception {
-        Method method = findMethod(Addition.class,
-                new Class[] { object.getType() });
-        if (method == null) {
-            throw new RuntimeException();
-        }
-        return new ObjectWrapper(method.invoke(content, object.getValue()));
+        return executeOperation(Addition.class, object);
     }
 
     @Override
-    public IObject equals(IObject object) throws Exception {
-        Method method = findMethod(EqualTo.class,
-                new Class[] { object.getType() });
-        if (method == null) {
-            throw new RuntimeException();
-        }
-        return new ObjectWrapper(method.invoke(content, object.getValue()));
+    public IObject equalTo(IObject object) throws Exception {
+        return executeOperation(EqualTo.class, object);
     }
 
     @Override
@@ -79,6 +80,61 @@ public class ObjectWrapper implements IObject {
             value = method.invoke(content, (Object[]) null);
         }
         return value;
+    }
+
+    @Override
+    public IObject subtract(IObject object) throws Exception {
+        return executeOperation(Subtraction.class, object);
+    }
+
+    @Override
+    public IObject multiply(IObject object) throws Exception {
+        return executeOperation(Multiplication.class, object);
+    }
+
+    @Override
+    public IObject divide(IObject object) throws Exception {
+        return executeOperation(Division.class, object);
+    }
+
+    @Override
+    public IObject notEqualTo(IObject object) throws Exception {
+        return executeOperation(NotEqualTo.class, object);
+    }
+
+    @Override
+    public IObject greaterThan(IObject object) throws Exception {
+        return executeOperation(GreaterThan.class, object);
+    }
+
+    @Override
+    public IObject greaterThanOrEqualTo(IObject object) throws Exception {
+        return executeOperation(GreaterThanOrEqualTo.class, object);
+    }
+
+    @Override
+    public IObject lessThan(IObject object) throws Exception {
+        return executeOperation(LessThan.class, object);
+    }
+
+    @Override
+    public IObject lessThanOrEqualTo(IObject object) throws Exception {
+        return executeOperation(LessThanOrEqualTo.class, object);
+    }
+
+    @Override
+    public IObject modulo(IObject object) throws Exception {
+        return executeOperation(Modulo.class, object);
+    }
+
+    @Override
+    public IObject minus() throws Exception {
+        return executeOperation(Minus.class);
+    }
+
+    @Override
+    public IObject negate() throws Exception {
+        return executeOperation(Negation.class);
     }
 
     private Method findMethod(Class annotationClass, Class<?>[] paramTypes) {
@@ -128,5 +184,23 @@ public class ObjectWrapper implements IObject {
             type = Boolean.class;
         }
         return type;
+    }
+
+    private IObject executeOperation(Class annotationClass, IObject object)
+            throws Exception {
+        Method method = findMethod(annotationClass,
+                new Class[] { object.getType() });
+        if (method == null) {
+            throw new RuntimeException();
+        }
+        return new ObjectWrapper(method.invoke(content, object.getValue()));
+    }
+
+    private IObject executeOperation(Class annotationClass) throws Exception {
+        Method method = findMethod(Addition.class, new Class[] {});
+        if (method == null) {
+            throw new RuntimeException();
+        }
+        return new ObjectWrapper(method.invoke(content, null));
     }
 }

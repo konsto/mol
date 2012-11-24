@@ -1,7 +1,17 @@
 package engine;
 
 import annotations.Addition;
+import annotations.Division;
 import annotations.EqualTo;
+import annotations.GreaterThan;
+import annotations.GreaterThanOrEqualTo;
+import annotations.LessThan;
+import annotations.LessThanOrEqualTo;
+import annotations.Minus;
+import annotations.Modulo;
+import annotations.Multiplication;
+import annotations.NotEqualTo;
+import annotations.Subtraction;
 import annotations.Type;
 import annotations.Value;
 
@@ -28,8 +38,63 @@ public class IntObject {
         return value + object;
     }
 
+    @Subtraction
+    public Integer subtract(int object) {
+        return value - object;
+    }
+
+    @Subtraction
+    public Double subtract(double object) {
+        return value - object;
+    }
+
+    @Division
+    public Integer divide(int object) {
+        return value / object;
+    }
+
+    @Multiplication
+    public Integer multiply(int object) {
+        return value * object;
+    }
+
+    @GreaterThan
+    public Boolean greaterThan(int object) {
+        return value > object;
+    }
+
+    @GreaterThanOrEqualTo
+    public Boolean greaterThanOrEqual(int object) {
+        return value >= object;
+    }
+
+    @LessThan
+    public Boolean lessThan(int object) {
+        return value < object;
+    }
+
+    @LessThanOrEqualTo
+    public Boolean lessThanOrEqualTo(int object) {
+        return value <= object;
+    }
+
     @EqualTo
     public Boolean equalTo(int object) {
         return value == object;
+    }
+
+    @NotEqualTo
+    public Boolean notEqualTo(int object) {
+        return value != object;
+    }
+
+    @Minus
+    public Integer minus() {
+        return -value;
+    }
+
+    @Modulo
+    public Integer modulo(int object) {
+        return value % object;
     }
 }

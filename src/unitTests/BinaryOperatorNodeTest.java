@@ -4,11 +4,12 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import engine.TestVisitor;
+
 import ast.BinaryOperatorNode;
 import ast.BinaryOperatorType;
 import ast.IExpressionNode;
 import ast.LiteralNode;
-import ast.TestVisitor;
 
 public class BinaryOperatorNodeTest {
 

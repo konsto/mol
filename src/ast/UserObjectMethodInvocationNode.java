@@ -6,7 +6,9 @@ public class UserObjectMethodInvocationNode implements IExpressionNode {
     String objectVariable;
     String method;
     List<IExpressionNode> params;
-
+    //TODO: UserObject --> IObject??
+    // Wspolny interfejs dla Plugin i UserObject.
+    //Polaczyc InvokeMethod i UserObject MethodInvocation
     public UserObjectMethodInvocationNode(String objectVariable, String method,
             List<IExpressionNode> params) {
         this.params = params;

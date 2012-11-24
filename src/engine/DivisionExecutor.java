@@ -1,15 +1,19 @@
-package ast;
+package engine;
 
 import exceptions.BadOperandsForOperationException;
+import exceptions.DivideByZeroException;
 
-public class LessThanOrEqualToExecutor extends AbstractBinaryOperationExecutor {
+public class DivisionExecutor extends AbstractBinaryOperationExecutor {
 
     @Override
     public Object execute(Object left, Object right) throws Exception {
         if (areNumbers(left, right)) {
             double temp1 = Double.parseDouble(left.toString());
             double temp2 = Double.parseDouble(right.toString());
-            return temp1 <= temp2;
+            if (temp2 == 0) {
+                throw new DivideByZeroException();
+            }
+            return temp1 / temp2;
         } else {
             throw new BadOperandsForOperationException();
         }

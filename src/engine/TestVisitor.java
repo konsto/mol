@@ -1,5 +1,6 @@
 package engine;
 
+import ast.AssigmentNode;
 import ast.BinaryOperatorNode;
 import ast.CommentNode;
 import ast.GroupNode;
@@ -17,6 +18,7 @@ import ast.VariableNode;
 public class TestVisitor implements IVisitor {
 
     public String message;
+
     @Override
     public void visit(INode node) {
         this.message = "INode";
@@ -65,18 +67,18 @@ public class TestVisitor implements IVisitor {
     @Override
     public void visit(IfNode node) {
         this.message = "IfNode";
-        
+
     }
 
     @Override
     public void visit(InvocationNode node) {
         this.message = "InvocationNode";
-        
+
     }
 
     @Override
-    public void visit(UserObjectMethodInvocationNode node) {
-        this.message = "UserObjectMethodInvocationNode";
-        
+    public void visit(AssigmentNode node) {
+        // TODO Auto-generated method stub
+
     }
 }

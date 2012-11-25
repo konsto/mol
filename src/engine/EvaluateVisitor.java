@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import ast.AssigmentNode;
 import ast.BinaryOperatorNode;
 import ast.BinaryOperatorType;
 import ast.CommentNode;
@@ -22,7 +23,7 @@ import ast.UnaryOperatorType;
 import ast.UserObjectMethodInvocationNode;
 import ast.VariableNode;
 
-import exceptions.NoSuchExecutorException;
+import exceptions.NoSuchEvaluatorException;
 import exceptions.NoSuchPluginException;
 
 import plugin.IPlugin;
@@ -31,23 +32,23 @@ import plugin.PluginFactory;
 import plugin.PluginManager;
 
 public class EvaluateVisitor implements IVisitor {
-    private Object value;
-    private Map<String, Object> context;
+    private IObject value;
+    private Map<String, IObject> context;
     private IPluginManager manager;
-    private Map<BinaryOperatorType, AbstractBinaryOperationExecutor> binaryExecutors;
-    private Map<UnaryOperatorType, AbstractUnaryOperationExecutor> unaryExecutors;
+    private Map<BinaryOperatorType, IBinaryEvaluator> binaryEvaluators;
+    private Map<UnaryOperatorType, IUnaryEvaluator> unaryEvaluators;
 
     public EvaluateVisitor() {
-        context = new HashMap<String, Object>();
+        context = new HashMap<String, IObject>();
         PluginManager temp = new PluginManager();
         temp.addFactory(new PluginFactory());
         manager = temp;
-        binaryExecutors = new HashMap<BinaryOperatorType, AbstractBinaryOperationExecutor>();
-        unaryExecutors = new HashMap<UnaryOperatorType, AbstractUnaryOperationExecutor>();
+        binaryEvaluators = new HashMap<BinaryOperatorType, IBinaryEvaluator>();
+        unaryEvaluators = new HashMap<UnaryOperatorType, IUnaryEvaluator>();
         setUp();
     }
 
-    public Object getContextValue(String key) {
+    public IObject getContextValue(String key) {
         if (context.containsKey(key)) {
             return context.get(key);
         } else {
@@ -55,30 +56,29 @@ public class EvaluateVisitor implements IVisitor {
         }
     }
 
-    public AbstractBinaryOperationExecutor findBinaryExecutor(
-            BinaryOperatorType operator) throws Exception {
-        AbstractBinaryOperationExecutor executor = binaryExecutors
-                .get(operator);
-        if (executor == null) {
-            throw new NoSuchExecutorException();
+    public IBinaryEvaluator findBinaryEvaluator(BinaryOperatorType operator)
+            throws Exception {
+        IBinaryEvaluator evaluator = binaryEvaluators.get(operator);
+        if (evaluator == null) {
+            throw new NoSuchEvaluatorException();
         }
-        return executor;
+        return evaluator;
     }
 
-    public AbstractUnaryOperationExecutor findUnaryExecutor(
-            UnaryOperatorType operator) throws Exception {
-        AbstractUnaryOperationExecutor executor = unaryExecutors.get(operator);
-        if (executor == null) {
-            throw new NoSuchExecutorException();
+    public IUnaryEvaluator findUnaryEvaluator(UnaryOperatorType operator)
+            throws Exception {
+        IUnaryEvaluator evaluator = unaryEvaluators.get(operator);
+        if (evaluator == null) {
+            throw new NoSuchEvaluatorException();
         }
-        return executor;
+        return evaluator;
     }
 
-    public Object getValue() {
+    public IObject getValue() {
         return this.value;
     }
 
-    public Map<String, Object> getContext() {
+    public Map<String, IObject> getContext() {
         return this.context;
     }
 
@@ -121,67 +121,53 @@ public class EvaluateVisitor implements IVisitor {
     public void visit(ImportNode node) {
         try {
             manager.importPlugin(node.getAlias(), node.getPluginName());
-            value = true;
+            value = new ObjectWrapper(true);
         } catch (Exception e) {
-            value = false;
+            value = new ObjectWrapper(false);
         }
 
     }
 
     @Override
     public void visit(LiteralNode node) {
-        Object temp = node.getValue();
-        if (Number.class.isAssignableFrom(temp.getClass())) {
-            temp = Double.parseDouble(temp.toString());
-        }
-        value = temp;
+        value = new ObjectWrapper(node.getValue());
 
     }
 
     @Override
     public void visit(VariableNode node) {
-        Object temp = this.context.get(node.getIdentifier());
+        IObject temp = this.context.get(node.getIdentifier());
         if (temp == null) {
             throw new RuntimeException();
         }
-        this.value = temp;
+        this.value = new ObjectWrapper(temp);
 
     }
 
     @Override
     public void visit(BinaryOperatorNode node) {
         node.getLeftOperand().accept(this);
-        Object left = value;
+        IObject left = value;
         node.getRightOperand().accept(this);
-        Object right = value;
+        IObject right = value;
         BinaryOperatorType operator = node.getOperator();
-        if (operator.equals(BinaryOperatorType.ASSIGMENT)) {
-            if (isPrimitive(right)) {
-                context.put(left.toString(), right);
-            } else {
-                context.put(left.toString(), new UserObject(right));
-            }
-
-        } else {
-            try {
-                AbstractBinaryOperationExecutor executor = findBinaryExecutor(operator);
-                value = executor.execute(left, right);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        try {
+            IBinaryEvaluator evaluator = findBinaryEvaluator(operator);
+            value = evaluator.evaluate(left, right);
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
-
     }
 
     @Override
     public void visit(UnaryOperatorNode node) {
         node.getOperand().accept(this);
-        Object operand = value;
+        IObject operand = value;
         UnaryOperatorType operator = node.getOperator();
         try {
-            AbstractUnaryOperationExecutor executor = findUnaryExecutor(operator);
-            value = executor.execute(operand);
+            IUnaryEvaluator evaluator = findUnaryEvaluator(operator);
+            value = evaluator.evaluate(operand);
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -202,86 +188,83 @@ public class EvaluateVisitor implements IVisitor {
         }
     }
 
+//TODO: INVOCATIONNODE!!!    
+    
     @Override
     public void visit(InvocationNode node) {
-        try {
-            List<IExpressionNode> exprs = node.getParams();
-            Object[] args = new Object[exprs.size()];
-            for (int i = 0; i < exprs.size(); i++) {
-                exprs.get(i).accept(this);
-                args[i] = this.value;
-            }
-            IPlugin module = manager.getPlugin(node.getPluginAlias());
-            this.value = module.callFunction(node.getMethod(), args);
-        } catch (NoSuchPluginException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+//        try {
+//            List<IExpressionNode> exprs = node.getParams();
+//            Object[] args = new Object[exprs.size()];
+//            for (int i = 0; i < exprs.size(); i++) {
+//                exprs.get(i).accept(this);
+//                args[i] = this.value;
+//            }
+//            IPlugin module = manager.getPlugin(node.getPluginAlias());
+//            this.value = module.callFunction(node.getMethod(), args);
+//        } catch (NoSuchPluginException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (NoSuchMethodException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
 
     // TODO: wszystko co wrzucam do contextu opakkowuej w IOBJECT, Ktory ma
     // invokeMethod
-    @Override
-    public void visit(UserObjectMethodInvocationNode node) {
-        List<IExpressionNode> exprs = node.getParams();
-        Object[] args = new Object[exprs.size()];
-        for (int i = 0; i < exprs.size(); i++) {
-            exprs.get(i).accept(this);
-            args[i] = this.value;
-        }
-        UserObject instance = (UserObject) this.context.get(node
-                .getObjectVariable());
-        try {
-            // TODO: zmienic callFunction na invokeMethod
-            this.value = instance.callFunction(node.getMethod(), args);
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-    }
-
-    private boolean isPrimitive(Object object) {
-        Class type = object.getClass();
-        if ((Number.class.isAssignableFrom(type))
-                || (type.equals(String.class)) || (type.equals(Boolean.class))) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//    @Override
+//    public void visit(UserObjectMethodInvocationNode node) {
+//        List<IExpressionNode> exprs = node.getParams();
+//        Object[] args = new Object[exprs.size()];
+//        for (int i = 0; i < exprs.size(); i++) {
+//            exprs.get(i).accept(this);
+//            args[i] = this.value;
+//        }
+//        UserObject instance = (UserObject) this.context.get(node
+//                .getObjectVariable());
+//        try {
+//            // TODO: zmienic callFunction na invokeMethod
+//            this.value = instance.callFunction(node.getMethod(), args);
+//        } catch (NoSuchMethodException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
+//
+//    }
 
     private void setUp() {
-        binaryExecutors
-                .put(BinaryOperatorType.ADDITION, new AdditionEvaluator());
-        binaryExecutors.put(BinaryOperatorType.SUBSTRACTION,
+        binaryEvaluators.put(BinaryOperatorType.ADDITION,
+                new AdditionEvaluator());
+        binaryEvaluators.put(BinaryOperatorType.SUBSTRACTION,
                 new SubtractionEvaluator());
-        binaryExecutors.put(BinaryOperatorType.MULTIPLICATION,
+        binaryEvaluators.put(BinaryOperatorType.MULTIPLICATION,
                 new MultiplicationEvaluator());
-        binaryExecutors
-                .put(BinaryOperatorType.DIVISION, new DivisionEvaluator());
-        binaryExecutors
-                .put(BinaryOperatorType.EQUAL__TO, new EqualToEvaluator());
-        binaryExecutors.put(BinaryOperatorType.GREATER_THAN,
+        binaryEvaluators.put(BinaryOperatorType.DIVISION,
+                new DivisionEvaluator());
+        binaryEvaluators.put(BinaryOperatorType.EQUAL__TO,
+                new EqualToEvaluator());
+        binaryEvaluators.put(BinaryOperatorType.GREATER_THAN,
                 new GreaterThanEvaluator());
-        binaryExecutors.put(BinaryOperatorType.GREATER_THAN_OR_EQUAL_TO,
+        binaryEvaluators.put(BinaryOperatorType.GREATER_THAN_OR_EQUAL_TO,
                 new GreaterThanOrEqualToEvaluator());
-        binaryExecutors.put(BinaryOperatorType.LESS_THAN,
+        binaryEvaluators.put(BinaryOperatorType.LESS_THAN,
                 new LessThanEvaluator());
-        binaryExecutors.put(BinaryOperatorType.LESS_THAN_OR_EQUAL_TO,
+        binaryEvaluators.put(BinaryOperatorType.LESS_THAN_OR_EQUAL_TO,
                 new LessThanOrEqualToEvaluator());
-        binaryExecutors.put(BinaryOperatorType.NOT_EQUAL_TO,
+        binaryEvaluators.put(BinaryOperatorType.NOT_EQUAL_TO,
                 new NotEqualToEvaluator());
+        unaryEvaluators
+                .put(UnaryOperatorType.NEGATION, new NegationEvaluator());
+        unaryEvaluators.put(UnaryOperatorType.MINUS, new MinusEvaluator());
+    }
 
-        unaryExecutors
-                .put(UnaryOperatorType.DECREMENT, new DecrementEvaluator());
-        unaryExecutors
-                .put(UnaryOperatorType.INCREMENT, new IncrementExecutor());
-        unaryExecutors.put(UnaryOperatorType.NEGATION,
-                new NegationEvaluator());
-        unaryExecutors.put(UnaryOperatorType.MINUS, new MinusEvaluator());
+    @Override
+    public void visit(AssigmentNode node) {
+        node.getIdentifier().accept(this);
+        IObject identifier = value;
+        node.getContent().accept(this);
+        IObject content = value;
+        context.put(identifier.toString(), content);
+        //TODO: nie wiem czy tu dobrze: identifier.toString()
     }
 }

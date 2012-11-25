@@ -2,6 +2,8 @@ package ast;
 
 public interface IVisitor {
 
+    public void visit(AssigmentNode node);
+    
     public void visit(INode node);
 
     public void visit(IExpressionNode node);
@@ -23,7 +25,6 @@ public interface IVisitor {
     public void visit(IfNode node);
     
     public void visit(InvocationNode node);
-    
-    public void visit(UserObjectMethodInvocationNode node);
+
 
 }

@@ -8,7 +8,8 @@ public class IfNode implements IExpressionNode {
     private Map<IExpressionNode, GroupNode> ifs;
     private GroupNode elseExpression;
 
-
+    //TODO: dodac metody: addIf(IExpressionNode condition, GroupNode codeBlock)
+    //                    addElse(GroupNode codeBlock)
     public IfNode(Map<IExpressionNode, GroupNode> ifs,
             GroupNode elseExpression) {
 
@@ -25,7 +26,7 @@ public class IfNode implements IExpressionNode {
     }
 
     @Override
-    public void accept(IVisitor visitor) {
+    public void accept(IVisitor visitor) throws Exception {
         visitor.visit(this);
 
     }

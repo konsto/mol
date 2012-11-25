@@ -40,7 +40,7 @@ public class LiteralNodeTest {
     }
 
     @Test
-    public void testAccept() {
+    public void testAccept() throws Exception {
         LiteralNode node = new LiteralNode(1);
         TestVisitor visitor = new TestVisitor();
         node.accept(visitor);

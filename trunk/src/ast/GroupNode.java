@@ -15,7 +15,7 @@ public class GroupNode implements INode {
         children.add(node);
     }
 
-    public void accept(IVisitor visitor) {
+    public void accept(IVisitor visitor) throws Exception {
         visitor.visit(this);
     }
     

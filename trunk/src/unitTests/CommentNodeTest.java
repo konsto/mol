@@ -16,7 +16,7 @@ public class CommentNodeTest {
     }
 
     @Test
-    public void testAccept() {
+    public void testAccept() throws Exception {
         CommentNode node = new CommentNode("Comment");
         TestVisitor visitor = new TestVisitor();
         node.accept(visitor);

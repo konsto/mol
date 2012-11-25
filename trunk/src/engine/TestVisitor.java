@@ -3,6 +3,7 @@ package engine;
 import ast.AssigmentNode;
 import ast.BinaryOperatorNode;
 import ast.CommentNode;
+import ast.ForNode;
 import ast.GroupNode;
 import ast.IExpressionNode;
 import ast.INode;
@@ -14,6 +15,7 @@ import ast.LiteralNode;
 import ast.UnaryOperatorNode;
 import ast.UserObjectMethodInvocationNode;
 import ast.VariableNode;
+import ast.WhileNode;
 
 public class TestVisitor implements IVisitor {
 
@@ -80,5 +82,17 @@ public class TestVisitor implements IVisitor {
     public void visit(AssigmentNode node) {
         // TODO Auto-generated method stub
 
+    }
+
+    @Override
+    public void visit(WhileNode node) throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void visit(ForNode node) throws Exception {
+        // TODO Auto-generated method stub
+        
     }
 }

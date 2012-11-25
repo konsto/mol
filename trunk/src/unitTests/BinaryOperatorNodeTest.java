@@ -3,9 +3,7 @@ package unitTests;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-
 import engine.TestVisitor;
-
 import ast.BinaryOperatorNode;
 import ast.BinaryOperatorType;
 import ast.IExpressionNode;
@@ -26,7 +24,7 @@ public class BinaryOperatorNodeTest {
     }
     
     @Test
-    public void testAccept() {
+    public void testAccept() throws Exception {
         LiteralNode  leftOperand = new LiteralNode(1);
         LiteralNode rightOperand = new LiteralNode(2);
         BinaryOperatorType operator = BinaryOperatorType.ADDITION;

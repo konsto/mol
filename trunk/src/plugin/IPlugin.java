@@ -1,8 +1,6 @@
 package plugin;
 
-public interface IPlugin {
+import engine.IInvocable;
 
-    Object callFunction(String methodName, Object... args)
-            throws NoSuchMethodException;
-
+public interface IPlugin extends IInvocable {
 }

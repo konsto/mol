@@ -3,21 +3,8 @@ package engine;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
-import annotations.Addition;
-import annotations.Division;
-import annotations.EqualTo;
-import annotations.GreaterThan;
-import annotations.GreaterThanOrEqualTo;
-import annotations.LessThan;
-import annotations.LessThanOrEqualTo;
-import annotations.Minus;
-import annotations.Modulo;
-import annotations.Multiplication;
-import annotations.Negation;
-import annotations.NotEqualTo;
-import annotations.Subtraction;
-import annotations.Type;
-import annotations.Value;
+import annotations.*;
+
 
 public class ObjectWrapper implements IObject {
     private Object content;

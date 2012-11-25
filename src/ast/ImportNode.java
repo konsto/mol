@@ -2,25 +2,25 @@ package ast;
 
 public class ImportNode implements INode {
 
-    private String pluginName;
+    private String moduleName;
     private String alias;
 
-    public ImportNode(String pluginName, String alias) {
-        this.pluginName = pluginName;
+    public ImportNode(String moduleName, String alias) {
+        this.moduleName = moduleName;
         this.alias = alias;
     }
 
-    public String getPluginName() {
-        return this.pluginName;
+    public String getModuleName() {
+        return this.moduleName;
     }
 
     public String getAlias() {
         return this.alias;
     }
-    
+
     @Override
-    public void accept(IVisitor visitor) {
+    public void accept(IVisitor visitor) throws Exception {
         visitor.visit(this);
-        
+
     }
 }

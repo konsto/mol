@@ -18,7 +18,7 @@ public class VariableNodeTest {
     }
 
     @Test
-    public void testAccept() {
+    public void testAccept() throws Exception {
         VariableNode node = new VariableNode("a");
         TestVisitor visitor = new TestVisitor();
         node.accept(visitor);

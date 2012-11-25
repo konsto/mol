@@ -19,7 +19,7 @@ public class ImportNodeTest {
     }
 
     @Test
-    public void VisitingImportNodeToTree() {
+    public void VisitingImportNodeToTree() throws Exception {
         INode in = new ImportNode("test_plugins.TestModule", "tm");
         assertNotNull(in);
         groupNode.addChild(in);

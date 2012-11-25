@@ -5,25 +5,26 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import plugin.PluginFactory;
+import engine.ModuleLoader;
+
 
 public class FactoryTest {
 
-    PluginFactory factory;
+    ModuleLoader factory;
 
     @Before
     public void setUp() throws Exception {
-        factory = new PluginFactory();
+        factory = new ModuleLoader();
     }
 
     @Test
     public void testCreatingPlugin() throws Exception {
-        factory.create("test_plugins.TestModule");
+        factory.load("test_plugins.TestModule");
     }
 
     @Test (expected = Exception.class)
     public void testCreatingNonExistingPlugin() throws Exception {
-        factory.create("bad.plugin.name");
+        factory.load("bad.plugin.name");
 
     }
 }

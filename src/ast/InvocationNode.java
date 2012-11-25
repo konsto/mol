@@ -15,7 +15,7 @@ public class InvocationNode implements IExpressionNode {
         this.target = target;
     }
 
-    public IExpressionNode getPluginAlias() {
+    public IExpressionNode getTarget() {
         return this.target;
     }
 
@@ -28,7 +28,7 @@ public class InvocationNode implements IExpressionNode {
     }
 
     @Override
-    public void accept(IVisitor visitor) {
+    public void accept(IVisitor visitor) throws Exception {
         visitor.visit(this);
     }
 }

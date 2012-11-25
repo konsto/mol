@@ -18,7 +18,7 @@ public class UnaryOperatorNode implements IExpressionNode {
     }
     
     @Override
-    public void accept(IVisitor visitor) {
+    public void accept(IVisitor visitor) throws Exception {
         visitor.visit(this);
 
     }

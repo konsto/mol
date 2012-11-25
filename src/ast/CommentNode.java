@@ -13,7 +13,7 @@ public class CommentNode implements INode {
     }
     
     @Override
-    public void accept(IVisitor visitor) {
+    public void accept(IVisitor visitor) throws Exception {
         visitor.visit(this);
         
     }

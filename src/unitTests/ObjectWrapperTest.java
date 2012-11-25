@@ -57,7 +57,7 @@ public class ObjectWrapperTest {
 
     @Test
     public void testConstructFromObject() throws Exception {
-        Vector2D vector = new Vector2D(2, 2);
+        Vector2D vector = new Vector2D(2,2);
         ObjectWrapper obj = new ObjectWrapper(vector);
         Object value = obj.getValue();
         assertEquals(Vector2D.class, value.getClass());
@@ -69,7 +69,7 @@ public class ObjectWrapperTest {
         ObjectWrapper obj = new ObjectWrapper(2);
         assertEquals(Integer.class, obj.getType());
 
-        obj = new ObjectWrapper(new Vector2D(2, 2));
+        obj = new ObjectWrapper(new Vector2D(2,2));
         assertEquals(Vector2D.class, obj.getType());
     }
 
@@ -112,7 +112,7 @@ public class ObjectWrapperTest {
     public void testInvokeMethod2() throws Exception {
         Class<?> c = Vector2D.class;
         Method method = c.getMethod("bigInt", new Class[] { Integer.class });
-        method.invoke(new Vector2D(2, 2), new Object[] { 1 });
+        method.invoke(new Vector2D(2,2), new Object[] { 1 });
     }
 
     //

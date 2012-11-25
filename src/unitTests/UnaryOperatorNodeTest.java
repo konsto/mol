@@ -23,7 +23,7 @@ public class UnaryOperatorNodeTest {
     }
     
     @Test
-    public void testAccept() {
+    public void testAccept() throws Exception {
         IExpressionNode operand = new LiteralNode(1);
         UnaryOperatorType operator = UnaryOperatorType.NEGATION;
         UnaryOperatorNode node = new UnaryOperatorNode(operand, operator);

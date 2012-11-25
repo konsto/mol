@@ -188,49 +188,49 @@ public class EvaluateVisitor implements IVisitor {
         }
     }
 
-//TODO: INVOCATIONNODE!!!    
-    
+    // TODO: INVOCATIONNODE!!!
+
     @Override
     public void visit(InvocationNode node) {
-//        try {
-//            List<IExpressionNode> exprs = node.getParams();
-//            Object[] args = new Object[exprs.size()];
-//            for (int i = 0; i < exprs.size(); i++) {
-//                exprs.get(i).accept(this);
-//                args[i] = this.value;
-//            }
-//            IPlugin module = manager.getPlugin(node.getPluginAlias());
-//            this.value = module.callFunction(node.getMethod(), args);
-//        } catch (NoSuchPluginException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
+        // try {
+        // List<IExpressionNode> exprs = node.getParams();
+        // Object[] args = new Object[exprs.size()];
+        // for (int i = 0; i < exprs.size(); i++) {
+        // exprs.get(i).accept(this);
+        // args[i] = this.value;
+        // }
+        // IPlugin module = manager.getPlugin(node.getPluginAlias());
+        // this.value = module.callFunction(node.getMethod(), args);
+        // } catch (NoSuchPluginException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // } catch (NoSuchMethodException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
     }
 
     // TODO: wszystko co wrzucam do contextu opakkowuej w IOBJECT, Ktory ma
     // invokeMethod
-//    @Override
-//    public void visit(UserObjectMethodInvocationNode node) {
-//        List<IExpressionNode> exprs = node.getParams();
-//        Object[] args = new Object[exprs.size()];
-//        for (int i = 0; i < exprs.size(); i++) {
-//            exprs.get(i).accept(this);
-//            args[i] = this.value;
-//        }
-//        UserObject instance = (UserObject) this.context.get(node
-//                .getObjectVariable());
-//        try {
-//            // TODO: zmienic callFunction na invokeMethod
-//            this.value = instance.callFunction(node.getMethod(), args);
-//        } catch (NoSuchMethodException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//
-//    }
+    // @Override
+    // public void visit(UserObjectMethodInvocationNode node) {
+    // List<IExpressionNode> exprs = node.getParams();
+    // Object[] args = new Object[exprs.size()];
+    // for (int i = 0; i < exprs.size(); i++) {
+    // exprs.get(i).accept(this);
+    // args[i] = this.value;
+    // }
+    // UserObject instance = (UserObject) this.context.get(node
+    // .getObjectVariable());
+    // try {
+    // // TODO: zmienic callFunction na invokeMethod
+    // this.value = instance.callFunction(node.getMethod(), args);
+    // } catch (NoSuchMethodException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    //
+    // }
 
     private void setUp() {
         binaryEvaluators.put(BinaryOperatorType.ADDITION,
@@ -260,11 +260,10 @@ public class EvaluateVisitor implements IVisitor {
 
     @Override
     public void visit(AssigmentNode node) {
-        node.getIdentifier().accept(this);
-        IObject identifier = value;
-        node.getContent().accept(this);
-        IObject content = value;
-        context.put(identifier.toString(), content);
-        //TODO: nie wiem czy tu dobrze: identifier.toString()
+        String identifier = node.getIdentifier();
+        node.getExpression().accept(this);
+        IObject expression = value;
+        context.put(identifier, expression);
+        // TODO: nie wiem czy tu dobrze: identifier.toString()
     }
 }

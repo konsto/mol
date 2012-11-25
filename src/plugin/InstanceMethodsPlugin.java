@@ -3,6 +3,8 @@ package plugin;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import engine.IObject;
+
 public class InstanceMethodsPlugin implements IPlugin {
     private Class pluginClass;
     private Method[] methods;
@@ -34,6 +36,13 @@ public class InstanceMethodsPlugin implements IPlugin {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public IObject invokeMethod(String method, IObject... args)
+            throws Exception {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 

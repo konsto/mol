@@ -4,19 +4,19 @@ import java.util.List;
 
 public class InvocationNode implements IExpressionNode {
 
-    String pluginAlias;
+    IExpressionNode target;
     String method;
     List<IExpressionNode> params;
 
-    public InvocationNode(String pluginAlias, String method,
+    public InvocationNode(IExpressionNode target, String method,
             List<IExpressionNode> params) {
         this.params = params;
         this.method = method;
-        this.pluginAlias = pluginAlias;
+        this.target = target;
     }
 
-    public String getPluginAlias() {
-        return this.pluginAlias;
+    public IExpressionNode getPluginAlias() {
+        return this.target;
     }
 
     public String getMethod() {

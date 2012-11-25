@@ -1,20 +1,20 @@
 package ast;
 
 public class AssigmentNode implements INode {
-    private IExpressionNode identifier;
-    private IExpressionNode content;
+    private String identifier;
+    private IExpressionNode expression;
 
-    public AssigmentNode(IExpressionNode ident, IExpressionNode content) {
+    public AssigmentNode(String ident, IExpressionNode content) {
         this.identifier = ident;
-        this.content = content;
+        this.expression = content;
     }
 
-    public IExpressionNode getIdentifier() {
+    public String getIdentifier() {
         return identifier;
     }
 
-    public IExpressionNode getContent() {
-        return content;
+    public IExpressionNode getExpression() {
+        return expression;
     }
 
     @Override

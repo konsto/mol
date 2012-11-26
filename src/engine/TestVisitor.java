@@ -13,7 +13,6 @@ import ast.ImportNode;
 import ast.InvocationNode;
 import ast.LiteralNode;
 import ast.UnaryOperatorNode;
-import ast.UserObjectMethodInvocationNode;
 import ast.VariableNode;
 import ast.WhileNode;
 

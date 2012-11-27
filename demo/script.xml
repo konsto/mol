@@ -1,0 +1,2 @@
+<GroupNode>
+	<ImportNode moduleName="test_plugins.Math2D" alias="m"></ImportNode></GroupNode>

@@ -1,0 +1,46 @@
+<program>
+	<import class="test_plugins.Math2D" as="math" />
+	<import class="Console" as="console" />
+
+	<var name="number">
+		<call target="math" method="sqrt">
+			<arg>
+				<call target="console" method="readInt">
+					<arg>
+						<string value="Give me a number: " />
+					</arg>
+				</call>
+			</arg>
+		</call>
+	</var>
+
+	<var name="max">
+		<double value="10.0" />
+	</var>
+
+	<branch>
+		<condition>
+			<lt>
+				<left>
+					<var name="number" />
+				</left>
+				<right>
+					<var name="max" />
+				</right>
+			</lt>
+			<action>
+				<call target="console" method="printString">
+					<string value="smaller" />
+				</call>
+			</action>
+		</condition>	
+		<action>
+				<call target="console" method="printString">
+					<string value="greater or equal" />
+				</call>
+		</action>
+	</branch>
+
+
+</program>
+

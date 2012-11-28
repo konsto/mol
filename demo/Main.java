@@ -1,4 +1,7 @@
+import java.util.LinkedHashMap;
+import java.util.Map;
 
+import unitTests.Vector2D;
 import engine.EvaluateVisitor;
 
 import ast.AssigmentNode;
@@ -20,31 +23,25 @@ public class Main {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
+        Vector2D v1 = new Vector2D(1, 1);
+        Vector2D v2 = new Vector2D(1, 1);
+        System.out.println(v1.equalTo(v2));
+
         EvaluateVisitor visitor = new EvaluateVisitor();
         GroupNode root = new GroupNode();
+        Map<IExpressionNode, GroupNode> ifs = new LinkedHashMap<IExpressionNode, GroupNode>();
+        GroupNode elseExpression = new GroupNode();
+        IExpressionNode condition = new BinaryOperatorNode(new LiteralNode(2),
+                new LiteralNode(2), BinaryOperatorType.EQUAL__TO);
+        GroupNode ifsCodeBlock = new GroupNode();
+        ifsCodeBlock.addChild(new AssigmentNode("result", new LiteralNode(
+                "EQUAL")));
+        ifs.put(condition, ifsCodeBlock);
+        elseExpression.addChild(new AssigmentNode("result", new LiteralNode(
+                "NOT EQUAL")));
 
-        // for (i = 0; i < 5; i++)
-        // {
-        // a = i
-        // }
-        GroupNode initializationFor = new GroupNode();
-        initializationFor
-                .addChild(new AssigmentNode("iter", new LiteralNode(0)));
-        BinaryOperatorNode conditionFor = new BinaryOperatorNode(
-                new VariableNode("iter"), new LiteralNode(5),
-                BinaryOperatorType.LESS_THAN);
-        GroupNode codeBlockFor = new GroupNode();
-        AssigmentNode assigmentFor = new AssigmentNode("wynikFora",
-                new VariableNode("iter"));
-        AssigmentNode assigmentFor2 = new AssigmentNode("iter",
-                new BinaryOperatorNode(new VariableNode("iter"),
-                        new LiteralNode(1), BinaryOperatorType.ADDITION));
-        codeBlockFor.addChild(assigmentFor);
-        codeBlockFor.addChild(assigmentFor2);
-        ForNode forNode = new ForNode(initializationFor, conditionFor,
-                codeBlockFor);
-
-        root.addChild(forNode);
+        IfNode ifNode = new IfNode(ifs, elseExpression);
+        root.addChild(ifNode);
         root.accept(visitor);
         visitor.printContext();
 

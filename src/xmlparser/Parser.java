@@ -99,24 +99,24 @@ public class Parser {
 
     private void createIfBranch(Node branch,
             Map<IExpressionNode, GroupNode> branches) {
-        TreeWalker outerWalker = traversal.createTreeWalker(
-                document.getDocumentElement(), NodeFilter.SHOW_ELEMENT, filter,
-                false);
-        outerWalker.setCurrentNode(branch);
+//        TreeWalker outerWalker = traversal.createTreeWalker(
+//                document.getDocumentElement(), NodeFilter.SHOW_ELEMENT, filter,
+//                false);
+//        outerWalker.setCurrentNode(branch);
         IExpressionNode condition = null;
         GroupNode branchCodeBlock = new GroupNode();
-        for (Node n = outerWalker.firstChild(); n != null; n = outerWalker
+        for (Node n = walker.firstChild(); n != null; n = walker
                 .nextSibling()) {
             if (n.getNodeName().equals("condition")) {
-                condition = (IExpressionNode) parseNode(outerWalker
+                condition = (IExpressionNode) parseNode(walker
                         .firstChild());
-                 outerWalker.setCurrentNode(n);
+                 walker.setCurrentNode(n);
             } else if (n.getNodeName().equals("action")) {
-                TreeWalker innerWalker = traversal.createTreeWalker(
-                        document.getDocumentElement(), NodeFilter.SHOW_ELEMENT,
-                        filter, false);
-                innerWalker.setCurrentNode(outerWalker.getCurrentNode());
-                for (Node m = innerWalker.firstChild(); m != null; m = innerWalker
+//                TreeWalker innerWalker = traversal.createTreeWalker(
+//                        document.getDocumentElement(), NodeFilter.SHOW_ELEMENT,
+//                        filter, false);
+//                innerWalker.setCurrentNode(outerWalker.getCurrentNode());
+                for (Node m = walker.firstChild(); m != null; m = walker
                         .nextSibling()) {
                     branchCodeBlock.addChild(parseNode(m));
                     System.out.println("A");
@@ -124,7 +124,7 @@ public class Parser {
             }
         }
         branches.put(condition, branchCodeBlock);
-        // walker.setCurrentNode(branch);
+         walker.setCurrentNode(branch);
     }
 
     private void createElseBranch(Node elseNode, GroupNode elseExpression) {
@@ -180,7 +180,7 @@ public class Parser {
                     .getNodeValue());
             break;
         case "assigment":
-            Node nn = walker.firstChild();
+//            Node nn = walker.firstChild();
             // IExpressionNode temp = (IExpressionNode)
             // parseNode(walker.firstChild());
             result = new AssigmentNode(attributes.getNamedItem("identifier")

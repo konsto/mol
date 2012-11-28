@@ -159,10 +159,9 @@ public class EvaluateVisitor implements IVisitor {
             if (evaluateBoolean(key)) {
                 ifs.get(key).accept(this);
                 break;
-            } else {
-                node.getElseExpression().accept(this);
             }
         }
+        node.getElseExpression().accept(this);
     }
 
     @Override

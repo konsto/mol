@@ -1,0 +1,22 @@
+<program>
+	<if>
+		<branch>
+			<condition>
+				<equalTo>
+					<int value="1" />
+					<int value="1" />
+				</equalTo>
+			</condition>
+			<action>
+				<assigment identifier="result">
+					<string value="Vectors are the same" />
+				</assigment>
+			</action>
+		</branch>
+		<else>
+			<assigment identifier="result">
+				<string value="Vectors are not the same" />
+			</assigment>
+		</else>
+	</if>
+</program>

@@ -210,6 +210,7 @@ public class EvaluateVisitor implements IVisitor {
         node.getInitialization().accept(this);
         while (evaluateBoolean(node.getCondition())) {
             node.getCodeBlock().accept(this);
+            node.getAfterBlock().accept(this);
         }
 
     }

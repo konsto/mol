@@ -21,4 +21,33 @@
 				</assigment>
 		</action>
 	</while>
+	<for>
+	   <initialization>
+	       <assigment identifier="i">
+	           <int value="0"/>
+	       </assigment>
+	   </initialization>
+	   <condition>
+	       <lessThan>
+	           <var identifier="i"/>
+	           <int value="5"/>
+	       </lessThan>
+	   </condition>
+	   <after>
+	       <assigment identifier="i">
+	           <addition>
+	               <var identifier="i"/>
+	               <int value="1"/>
+	           </addition>
+	       </assigment>
+	   </after>
+	   <action>
+	       <assigment identifier="c">
+	           <addition>
+	               <var identifier="i"/>
+	               <int value="2"/>
+	           </addition>
+	       </assigment>
+	   </action>
+	</for>
 </program>

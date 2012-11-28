@@ -43,10 +43,10 @@
 	   </after>
 	   <action>
 	       <assigment identifier="c">
-	           <addition>
+	           <multiply>
 	               <var identifier="i"/>
-	               <int value="2"/>
-	           </addition>
+	               <int value="21"/>
+	           </multiply>
 	       </assigment>
 	   </action>
 	</for>

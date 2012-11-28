@@ -1,0 +1,48 @@
+<program>
+<!-- 	<import class="test_plugins.Math2D" alias="math" /> -->
+<!-- 	<assigment identifier="vector"> -->
+<!-- 		<call method="getVector"> -->
+<!-- 			<var identifier="math" /> -->
+<!-- 			<int value="2" /> -->
+<!-- 			<int value="2" /> -->
+<!-- 		</call> -->
+<!-- 	</assigment> -->
+<!-- 	<assigment identifier="vector2"> -->
+<!-- 		<call method="getVector"> -->
+<!-- 			<var identifier="math" /> -->
+<!-- 			<int value="2" /> -->
+<!-- 			<int value="2" /> -->
+<!-- 		</call> -->
+<!-- 	</assigment> -->
+<!-- 	<assigment identifier="c"> -->
+<!-- 		<addition> -->
+<!-- 			<int value="1" /> -->
+<!-- 			<int value="2" /> -->
+<!-- 		</addition> -->
+<!-- 	</assigment> -->
+<!-- 	<assigment identifier="d"> -->
+<!-- 		<minus> -->
+<!-- 			<var identifier="c" /> -->
+<!-- 		</minus> -->
+<!-- 	</assigment> -->
+	<if>
+		<branch>
+			<condition>
+				<equalTo>
+					<int value="1"/>
+					<int value="2"/>
+				</equalTo>
+			</condition>
+			<action>
+				<assigment identifier="result">
+					<string value="Vectors are the same" />
+				</assigment>
+			</action>
+		</branch>
+		<else>
+			<assigment identifier="result">
+				<string value="Vectors are not the same" />
+			</assigment>
+		</else>
+	</if>
+</program>

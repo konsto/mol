@@ -136,10 +136,10 @@ public class ObjectWrapper implements IObject {
     }
 
     private IObject executeOperation(Class annotationClass) throws Exception {
-        Method method = helper.findMethod(Addition.class, new Class[] {});
+        Method method = helper.findMethod(annotationClass, new Class[] {});
         if (method == null) {
             throw new RuntimeException();
         }
-        return new ObjectWrapper(method.invoke(content, null));
+        return new ObjectWrapper(method.invoke(content, (Object[]) null));
     }
 }

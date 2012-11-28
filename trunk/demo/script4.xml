@@ -1,7 +1,7 @@
 <program>
 	<import class="test_plugins.Math2D" alias="math" />
-	<assigment identifier="number">
-		<int value="10" />
+	<assigment identifier="a">
+		<int value="5" />
 	</assigment>
 	<assigment identifier="second_number">
 		<double value="2.3" />

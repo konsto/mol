@@ -32,7 +32,7 @@ public class ParserDemo {
     public static void main(String[] args) throws Exception {
         EvaluateVisitor visitor = new EvaluateVisitor();
         Parser parser = new Parser();
-        parser.setUp("/home/michal/dev/mol-trunk/demo/script4.xml");
+        parser.setUp("/home/michal/dev/mol-trunk/demo/script5.xml");
 //        parser.printTree("");
         INode root = parser.parseProgram();
         root.accept(visitor);

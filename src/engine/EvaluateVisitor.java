@@ -193,6 +193,7 @@ public class EvaluateVisitor implements IVisitor {
     public void visit(WhileNode node) throws Exception {
         while (evaluateBoolean(node.getCondition())) {
             node.getCodeBlock().accept(this);
+            System.out.println(value.getValue());
         }
     }
 

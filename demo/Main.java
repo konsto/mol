@@ -23,25 +23,19 @@ public class Main {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        Vector2D v1 = new Vector2D(1, 1);
-        Vector2D v2 = new Vector2D(1, 1);
-        System.out.println(v1.equalTo(v2));
-
         EvaluateVisitor visitor = new EvaluateVisitor();
         GroupNode root = new GroupNode();
-        Map<IExpressionNode, GroupNode> ifs = new LinkedHashMap<IExpressionNode, GroupNode>();
-        GroupNode elseExpression = new GroupNode();
-        IExpressionNode condition = new BinaryOperatorNode(new LiteralNode(2),
-                new LiteralNode(2), BinaryOperatorType.EQUAL__TO);
-        GroupNode ifsCodeBlock = new GroupNode();
-        ifsCodeBlock.addChild(new AssigmentNode("result", new LiteralNode(
-                "EQUAL")));
-        ifs.put(condition, ifsCodeBlock);
-        elseExpression.addChild(new AssigmentNode("result", new LiteralNode(
-                "NOT EQUAL")));
+        AssigmentNode assigment = new AssigmentNode("a", new LiteralNode(0));
+        BinaryOperatorNode condition = new BinaryOperatorNode(new VariableNode(
+                "a"), new LiteralNode(5), BinaryOperatorType.LESS_THAN);
+        GroupNode codeBlock = new GroupNode();
+        AssigmentNode assigment2 = new AssigmentNode("a", new BinaryOperatorNode(new VariableNode("a"),
+                new LiteralNode(1), BinaryOperatorType.ADDITION));
+        codeBlock.addChild(assigment2);
+        WhileNode whileNode = new WhileNode(condition, codeBlock);
 
-        IfNode ifNode = new IfNode(ifs, elseExpression);
-        root.addChild(ifNode);
+        root.addChild(assigment);
+        root.addChild(whileNode);
         root.accept(visitor);
         visitor.printContext();
 

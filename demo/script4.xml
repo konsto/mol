@@ -1,14 +1,14 @@
 <program>
 	<import class="test_plugins.Math2D" alias="math" />
-<!-- 	<assigment identifier="number"> -->
-<!-- 		<int value="10" /> -->
-<!-- 	</assigment> -->
-<!-- 	<assigment identifier="second_number"> -->
-<!-- 		<double value="2.3" /> -->
-<!-- 	</assigment> -->
-<!-- 	<assigment identifier="third_number"> -->
-<!-- 		<var identifier="number" /> -->
-<!-- 	</assigment> -->
+	<assigment identifier="number">
+		<int value="10" />
+	</assigment>
+	<assigment identifier="second_number">
+		<double value="2.3" />
+	</assigment>
+	<assigment identifier="third_number">
+		<var identifier="number" />
+	</assigment>
 	<assigment identifier="vector">
 		<call method="getVector">
 			<var identifier="math" />
@@ -23,12 +23,12 @@
 			<int value="1" />
 		</call>
 	</assigment>
-<!-- 	<assigment identifier="wynik_dodawania"> -->
-<!-- 		<addition> -->
-<!-- 			<int value="10" /> -->
-<!-- 			<int value="11" /> -->
-<!-- 		</addition> -->
-<!-- 	</assigment> -->
+	<assigment identifier="wynik_dodawania">
+		<addition>
+			<int value="10" />
+			<int value="11" />
+		</addition>
+	</assigment>
 	<if>
 		<branch>
 			<condition>

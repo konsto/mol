@@ -30,6 +30,7 @@ import ast.LiteralNode;
 import ast.UnaryOperatorNode;
 import ast.UnaryOperatorType;
 import ast.VariableNode;
+import ast.WhileNode;
 
 public class Parser {
     DocumentBuilderFactory builder;
@@ -75,6 +76,116 @@ public class Parser {
         return root;
     }
 
+    public INode parseNode(Node node) {
+        INode result = null;
+        String type = node.getNodeName();
+        switch (type) {
+        case "import":
+            result = createImportNode(node);
+            break;
+        case "int":
+        case "double":
+        case "string":
+            result = createLiteralNode(node, type);
+            break;
+        case "var":
+            result = createVariableNode(node);
+            break;
+        case "assigment":
+            result = createAssigmentNode(node);
+            break;
+        case "call":
+            result = createInvocationNode(node);
+            break;
+        // Binary operators
+        case "addition":
+        case "subtract":
+        case "multiply":
+        case "divide":
+        case "equalTo":
+        case "notEqualTo":
+        case "greaterThan":
+        case "lessThan":
+        case "greaterThanOrEqualTo":
+        case "lessThanOrEqualTo":
+            result = createBinaryNode(node, type);
+            break;
+        // Unary operators
+        case "minus":
+        case "negation":
+            result = createUnaryNode(node, type);
+            break;
+        case "if":
+            result = createIfNode(node);
+            break;
+        case "while":
+            result = createWhileNode(node);
+            break;
+        default:
+            throw new RuntimeException();
+        }
+        walker.setCurrentNode(node);
+        return result;
+    }
+
+    private ImportNode createImportNode(Node node) {
+        NamedNodeMap attributes = node.getAttributes();
+        ImportNode result = new ImportNode(attributes.getNamedItem("class")
+                .getNodeValue(), attributes.getNamedItem("alias")
+                .getNodeValue());
+        return result;
+    }
+
+    private VariableNode createVariableNode(Node node) {
+        NamedNodeMap attributes = node.getAttributes();
+        VariableNode result = new VariableNode(attributes.getNamedItem(
+                "identifier").getNodeValue());
+        return result;
+    }
+
+    private LiteralNode createLiteralNode(Node node, String type) {
+        NamedNodeMap attributes = node.getAttributes();
+        Object arg = null;
+        switch (type.toLowerCase()) {
+        case "double":
+            arg = Double.parseDouble(attributes.getNamedItem("value")
+                    .getNodeValue());
+            break;
+        case "int":
+            arg = Integer.parseInt(attributes.getNamedItem("value")
+                    .getNodeValue());
+            break;
+        case "string":
+            arg = attributes.getNamedItem("value").getNodeValue();
+            break;
+        default:
+            throw new RuntimeException();
+        }
+        LiteralNode result = new LiteralNode(arg);
+        return result;
+    }
+
+    private InvocationNode createInvocationNode(Node node) {
+        NamedNodeMap attributes = node.getAttributes();
+        String method = attributes.getNamedItem("method").getNodeValue();
+        IExpressionNode target = (IExpressionNode) parseNode(walker
+                .firstChild());
+        List<IExpressionNode> params = new LinkedList<IExpressionNode>();
+        for (Node n = walker.nextSibling(); n != null; n = walker.nextSibling()) {
+            params.add((IExpressionNode) parseNode(n));
+        }
+        InvocationNode result = new InvocationNode(target, method, params);
+        return result;
+    }
+
+    private AssigmentNode createAssigmentNode(Node node) {
+        NamedNodeMap attributes = node.getAttributes();
+        AssigmentNode result = new AssigmentNode(attributes.getNamedItem(
+                "identifier").getNodeValue(),
+                (IExpressionNode) parseNode(walker.firstChild()));
+        return result;
+    }
+
     private IExpressionNode createBinaryNode(Node n, String type) {
         walker.setCurrentNode(n);
         BinaryOperatorType operator = BinaryOperatorType.getEnum(type);
@@ -99,36 +210,25 @@ public class Parser {
 
     private void createIfBranch(Node branch,
             Map<IExpressionNode, GroupNode> branches) {
-//        TreeWalker outerWalker = traversal.createTreeWalker(
-//                document.getDocumentElement(), NodeFilter.SHOW_ELEMENT, filter,
-//                false);
-//        outerWalker.setCurrentNode(branch);
         IExpressionNode condition = null;
         GroupNode branchCodeBlock = new GroupNode();
-        for (Node n = walker.firstChild(); n != null; n = walker
-                .nextSibling()) {
+        for (Node n = walker.firstChild(); n != null; n = walker.nextSibling()) {
             if (n.getNodeName().equals("condition")) {
-                condition = (IExpressionNode) parseNode(walker
-                        .firstChild());
-                 walker.setCurrentNode(n);
+                condition = (IExpressionNode) parseNode(walker.firstChild());
+                walker.setCurrentNode(n);
             } else if (n.getNodeName().equals("action")) {
-//                TreeWalker innerWalker = traversal.createTreeWalker(
-//                        document.getDocumentElement(), NodeFilter.SHOW_ELEMENT,
-//                        filter, false);
-//                innerWalker.setCurrentNode(outerWalker.getCurrentNode());
                 for (Node m = walker.firstChild(); m != null; m = walker
                         .nextSibling()) {
                     branchCodeBlock.addChild(parseNode(m));
-                    System.out.println("A");
                 }
             }
         }
         branches.put(condition, branchCodeBlock);
-         walker.setCurrentNode(branch);
+        walker.setCurrentNode(branch);
     }
 
     private void createElseBranch(Node elseNode, GroupNode elseExpression) {
-//        walker.setCurrentNode(elseNode);
+        // walker.setCurrentNode(elseNode);
         for (Node n = walker.firstChild(); n != null; n = walker.nextSibling()) {
             elseExpression.addChild(parseNode(n));
         }
@@ -137,7 +237,6 @@ public class Parser {
     }
 
     private IExpressionNode createIfNode(Node n) {
-//        walker.setCurrentNode(n);
         Map<IExpressionNode, GroupNode> ifs = new LinkedHashMap<IExpressionNode, GroupNode>();
         GroupNode elseExpression = new GroupNode();
         for (Node m = walker.firstChild(); m != null; m = walker.nextSibling()) {
@@ -145,84 +244,31 @@ public class Parser {
                 createIfBranch(m, ifs);
             } else if (m.getNodeName().equals("else")) {
                 createElseBranch(m, elseExpression);
+            } else {
+                throw new RuntimeException();
             }
         }
-        walker.setCurrentNode(n);
         IfNode ifNode = new IfNode(ifs, elseExpression);
         return ifNode;
     }
 
-    public INode parseNode(Node node) {
-        INode result = null;
-        NamedNodeMap attributes = node.getAttributes();
-        String type = node.getNodeName();
-        switch (type) {
-        case "import":
-            // System.out.println(attributes.getNamedItem("class").getNodeValue());
-            result = new ImportNode(attributes.getNamedItem("class")
-                    .getNodeValue(), attributes.getNamedItem("alias")
-                    .getNodeValue());
-            break;
-        case "int":
-            result = new LiteralNode(Integer.parseInt(attributes.getNamedItem(
-                    "value").getNodeValue()));
-            break;
-        case "double":
-            result = new LiteralNode(Double.parseDouble(attributes
-                    .getNamedItem("value").getNodeValue()));
-            break;
-        case "string":
-            result = new LiteralNode(attributes.getNamedItem("value")
-                    .getNodeValue());
-            break;
-        case "var":
-            result = new VariableNode(attributes.getNamedItem("identifier")
-                    .getNodeValue());
-            break;
-        case "assigment":
-//            Node nn = walker.firstChild();
-            // IExpressionNode temp = (IExpressionNode)
-            // parseNode(walker.firstChild());
-            result = new AssigmentNode(attributes.getNamedItem("identifier")
-                    .getNodeValue(),
-                    (IExpressionNode) parseNode(walker.firstChild()));
-            break;
-        case "call":
-            String method = attributes.getNamedItem("method").getNodeValue();
-            IExpressionNode target = (IExpressionNode) parseNode(walker
-                    .firstChild());
-            List<IExpressionNode> params = new LinkedList<IExpressionNode>();
-            for (Node n = walker.nextSibling(); n != null; n = walker
-                    .nextSibling()) {
-                params.add((IExpressionNode) parseNode(n));
+    private WhileNode createWhileNode(Node node) {
+        IExpressionNode condition = null;
+        GroupNode codeBlock = new GroupNode();
+        for (Node n = walker.firstChild(); n != null; n = walker.nextSibling()) {
+            if (n.getNodeName().equals("condition")) {
+                condition = (IExpressionNode) parseNode(walker.firstChild());
+                walker.setCurrentNode(n);
+            } else if (n.getNodeName().equals("action")) {
+                for (Node m = walker.firstChild(); m != null; m = walker
+                        .nextSibling()) {
+                    codeBlock.addChild(parseNode(m));
+                }
+            } else {
+                throw new RuntimeException();
             }
-            result = new InvocationNode(target, method, params);
-            break;
-        // Binary operators
-        case "addition":
-        case "subtract":
-        case "multiply":
-        case "divide":
-        case "equalTo":
-        case "notEqualTo":
-        case "greaterThan":
-        case "lessThan":
-        case "greaterThanOrEqualTo":
-        case "lessThanOrEqualTo":
-            result = createBinaryNode(node, type);
-            break;
-        // Unary operators
-        case "minus":
-            result = createUnaryNode(node, type);
-            break;
-        case "negation":
-            result = createUnaryNode(node, type);
-            break;
-        case "if":
-            result = createIfNode(node);
-            break;
         }
-        walker.setCurrentNode(node);
-        return result;
+        WhileNode whileNode = new WhileNode(condition, codeBlock);
+        return whileNode;
     }
 }

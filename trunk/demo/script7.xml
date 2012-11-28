@@ -1,0 +1,37 @@
+<program>
+	<import class="test_plugins.Math2D" alias="math" />
+	<assigment identifier="vector1">
+		<call method="getVector">
+			<var identifier="math" />
+			<int value="2" />
+			<int value="2" />
+		</call>
+	</assigment>
+	<assigment identifier="vector2">
+		<call method="getVector">
+			<var identifier="math" />
+			<int value="10" />
+			<int value="10" />
+		</call>
+	</assigment>
+	<while>
+		<condition>
+			<lessThan>
+				<var identifier="vector1" />
+				<var identifier="vector2" />
+			</lessThan>
+		</condition>
+		<action>
+			<call method="add">
+				<var identifier="vector1" />
+				<int value="1" />
+				<int value="1" />
+			</call>
+			<assigment identifier="result">
+				<call method="print">
+				<var identifier="vector1" />
+				</call>
+			</assigment>
+		</action>
+	</while>
+</program>

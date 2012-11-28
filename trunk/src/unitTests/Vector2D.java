@@ -10,11 +10,11 @@ public class Vector2D {
         this.x = x;
         this.y = y;
     }
-    
+
     public void setX(int x) {
-        this.x = x; 
+        this.x = x;
     }
-    
+
     public void setY(int y) {
         this.y = y;
     }
@@ -39,6 +39,15 @@ public class Vector2D {
         return false;
     }
 
+    @LessThan
+    public boolean lessThan(Vector2D vector) {
+        if (x < vector.x && y < vector.y) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     @Method
     public int getX() {
         return x;
@@ -48,17 +57,22 @@ public class Vector2D {
     public int getY() {
         return y;
     }
-    
+
+    @Method
+    public String print() {
+        return "Vector2D: x:" + x + " ==> y: " + y;
+    }
+
     public int bannedMethod() {
         return 1;
     }
-    
+
     @Method
     public void smallInt(int a) {
     }
-    
+
     @Method
     public void bigInt(Integer a) {
-        
+
     }
 }

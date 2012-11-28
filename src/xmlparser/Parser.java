@@ -40,6 +40,7 @@ public class Parser {
     Document document;
     DocumentTraversal traversal;
     MyNodeFilter filter;
+    AstNodeCreator creator;
 
     public Parser() throws ParserConfigurationException {
         builder = DocumentBuilderFactory.newInstance();
@@ -80,56 +81,60 @@ public class Parser {
     public INode parseNode(Node node) {
         INode result = null;
         String type = node.getNodeName();
-        switch (type) {
-        case "import":
-            result = createImportNode(node);
-            break;
-        case "int":
-        case "double":
-        case "string":
-            result = createLiteralNode(node, type);
-            break;
-        case "var":
-            result = createVariableNode(node);
-            break;
-        case "assigment":
-            result = createAssigmentNode(node);
-            break;
-        case "call":
-            result = createInvocationNode(node);
-            break;
-        // Binary operators
-        case "addition":
-        case "subtract":
-        case "multiply":
-        case "divide":
-        case "equalTo":
-        case "notEqualTo":
-        case "greaterThan":
-        case "lessThan":
-        case "greaterThanOrEqualTo":
-        case "lessThanOrEqualTo":
-            result = createBinaryNode(node, type);
-            break;
-        // Unary operators
-        case "minus":
-        case "negation":
-            result = createUnaryNode(node, type);
-            break;
-        case "if":
-            result = createIfNode(node);
-            break;
-        case "while":
-            result = createWhileNode(node);
-            break;
-        case "for":
-            result = createForNode(node);
-            break;
-        default:
-            throw new RuntimeException();
-        }
+        creator = AstNodeCreator.getInstance(node, walker, this);
+        result = creator.create();
         walker.setCurrentNode(node);
         return result;
+//        switch (type) {
+//        case "import":
+//            result = creator.create();
+//            break;
+//        case "int":
+//        case "double":
+//        case "string":
+//            result = creator.create();
+//            break;
+//        case "var":
+//            result = createVariableNode(node);
+//            break;
+//        case "assigment":
+//            result = creator.create();
+//            break;
+//        case "call":
+//            result = createInvocationNode(node);
+//            break;
+//        // Binary operators
+//        case "addition":
+//        case "subtract":
+//        case "multiply":
+//        case "divide":
+//        case "equalTo":
+//        case "notEqualTo":
+//        case "greaterThan":
+//        case "lessThan":
+//        case "greaterThanOrEqualTo":
+//        case "lessThanOrEqualTo":
+//            result = createBinaryNode(node, type);
+//            break;
+//        // Unary operators
+//        case "minus":
+//        case "negation":
+//            result = createUnaryNode(node, type);
+//            break;
+//        case "if":
+//            result = createIfNode(node);
+//            break;
+//        case "while":
+//            result = createWhileNode(node);
+//            break;
+//        case "for":
+//            result = createForNode(node);
+//            break;
+//        default:
+//            throw new RuntimeException();
+//        }
+//        walker.setCurrentNode(node);
+//        return result;
     }
 
     private ForNode createForNode(Node node) {

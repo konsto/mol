@@ -20,6 +20,8 @@ public class ObjectWrapper implements IObject {
             object = new DoubleObject((Float) object);
         } else if (object instanceof Boolean) {
             object = new BooleanObject((Boolean) object);
+        } else if (object == null) {
+
         }
         this.content = object;
         this.helper = new ReflectionHelper(this.content.getClass());
@@ -47,7 +49,13 @@ public class ObjectWrapper implements IObject {
         if (method == null) {
             throw new RuntimeException();
         }
-        return new ObjectWrapper(method.invoke(content, argValues));
+        Object temp = method.invoke(content, argValues);
+        if (temp != null) {
+            return new ObjectWrapper(temp);
+        } else {
+            return null;
+        }
+
     }
 
     @Override

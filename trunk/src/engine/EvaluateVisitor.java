@@ -150,18 +150,28 @@ public class EvaluateVisitor implements IVisitor {
         value = evaluator.evaluate(operand);
     }
 
+    // @Override
+    // public void visit(IfNode node) throws Exception {
+    // Map<IExpressionNode, GroupNode> ifs = node.getIfs();
+    // for (IExpressionNode key : ifs.keySet()) {
+    // key.accept(this);
+    // }
+    // }
+
     @Override
     public void visit(IfNode node) throws Exception {
         Map<IExpressionNode, GroupNode> ifs = node.getIfs();
         for (IExpressionNode key : ifs.keySet()) {
-            //key.accept(this);
-            //Boolean condition = (Boolean) value.getValue();
+            // key.accept(this);
+            // Boolean condition = (Boolean) value.getValue();
             if (evaluateBoolean(key)) {
                 ifs.get(key).accept(this);
                 break;
+            } else {
+                node.getElseExpression().accept(this);
             }
         }
-        node.getElseExpression().accept(this);
+
     }
 
     @Override
@@ -193,16 +203,15 @@ public class EvaluateVisitor implements IVisitor {
         value = target.invokeMethod(node.getMethod(),
                 evaluateParams(node.getParams()));
     }
-    
+
     @Override
     public void visit(ForNode node) throws Exception {
         node.getInitialization().accept(this);
         while (evaluateBoolean(node.getCondition())) {
             node.getCodeBlock().accept(this);
         }
-        
-    }
 
+    }
 
     private void setUp() {
         binaryEvaluators.put(BinaryOperatorType.ADDITION,

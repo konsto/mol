@@ -23,19 +23,28 @@ public class Main {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        EvaluateVisitor visitor = new EvaluateVisitor();
-        GroupNode root = new GroupNode();
-        AssigmentNode assigment = new AssigmentNode("a", new LiteralNode(0));
-        BinaryOperatorNode condition = new BinaryOperatorNode(new VariableNode(
-                "a"), new LiteralNode(5), BinaryOperatorType.LESS_THAN);
-        GroupNode codeBlock = new GroupNode();
-        AssigmentNode assigment2 = new AssigmentNode("a", new BinaryOperatorNode(new VariableNode("a"),
-                new LiteralNode(1), BinaryOperatorType.ADDITION));
-        codeBlock.addChild(assigment2);
-        WhileNode whileNode = new WhileNode(condition, codeBlock);
 
-        root.addChild(assigment);
-        root.addChild(whileNode);
+        GroupNode root = new GroupNode();
+        EvaluateVisitor visitor = new EvaluateVisitor();
+
+        GroupNode initialization = new GroupNode();
+        IExpressionNode condition = null;
+        GroupNode codeBlock = new GroupNode();
+        GroupNode afterBlock = new GroupNode();
+       
+
+        initialization.addChild(new AssigmentNode("i", new LiteralNode(0)));
+        condition = new BinaryOperatorNode(new VariableNode("i"),
+                new LiteralNode(5), BinaryOperatorType.LESS_THAN);
+        afterBlock.addChild(new AssigmentNode("i", new BinaryOperatorNode(
+                new VariableNode("i"), new LiteralNode(1),
+                BinaryOperatorType.ADDITION)));
+        codeBlock.addChild(new AssigmentNode("wynikFora", new VariableNode("i")));
+
+        ForNode forNode = new ForNode(initialization, condition, codeBlock,
+                afterBlock);
+        
+        root.addChild(forNode);
         root.accept(visitor);
         visitor.printContext();
 

@@ -1,5 +1,7 @@
 package xmlparser;
 
+import java.io.InputStream;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -25,8 +27,8 @@ public class Parser {
         builder = DocumentBuilderFactory.newInstance();
     }
 
-    public void setUp(String filepath) throws Exception {
-        document = builder.newDocumentBuilder().parse(filepath);
+    public void setUp(InputStream input) throws Exception {
+        document = builder.newDocumentBuilder().parse(input);
         traversal = (DocumentTraversal) document;
         filter = new MyNodeFilter();
         walker = traversal.createTreeWalker(document.getDocumentElement(),
@@ -46,7 +48,7 @@ public class Parser {
         return root;
     }
 
-    public INode parseProgram() {
+    public GroupNode parseProgram() {
         root = new GroupNode();
         for (Node n = walker.firstChild(); n != null; n = walker.nextSibling()) {
             INode child = parseNode(n);

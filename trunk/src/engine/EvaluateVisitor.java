@@ -33,8 +33,8 @@ public class EvaluateVisitor implements IVisitor {
     private Map<BinaryOperatorType, IBinaryEvaluator> binaryEvaluators;
     private Map<UnaryOperatorType, IUnaryEvaluator> unaryEvaluators;
 
-    public EvaluateVisitor() {
-        context = new Context();
+    public EvaluateVisitor(Context context) {
+        this.context = context;
         loader = new ModuleLoader();
         binaryEvaluators = new HashMap<BinaryOperatorType, IBinaryEvaluator>();
         unaryEvaluators = new HashMap<UnaryOperatorType, IUnaryEvaluator>();
@@ -67,6 +67,10 @@ public class EvaluateVisitor implements IVisitor {
         return this.context;
     }
 
+    public IObject getElement(String key) {
+        return this.context.getEntry(key).getObject();
+    }
+    
     public void printContext() throws Exception {
         context.print();
     }

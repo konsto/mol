@@ -7,7 +7,7 @@
 		<double value="2.3" />
 	</assigment>
 	<assigment identifier="third_number">
-		<var identifier="number" />
+		<var identifier="second_number" />
 	</assigment>
 	<assigment identifier="vector">
 		<call method="getVector">

@@ -1,0 +1,6 @@
+<program>
+    <import class="test_plugins.Console" alias="c"/>
+    <assigment identifier="a">
+        <string value="Proba printa"/>
+    </assigment>
+</program>

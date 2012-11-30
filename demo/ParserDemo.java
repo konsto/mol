@@ -1,8 +1,7 @@
 
-import engine.EvaluateVisitor;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import ast.INode;
-import xmlparser.Parser;
 
 public class ParserDemo {
 
@@ -11,13 +10,14 @@ public class ParserDemo {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        EvaluateVisitor visitor = new EvaluateVisitor();
-        Parser parser = new Parser();
-        parser.setUp("/home/michal/dev/mol-trunk/demo/script6.xml");
-//        parser.printTree("");
-        INode root = parser.parseProgram();
-        root.accept(visitor);
-        visitor.printContext();
-
+        String text    = "print (a)  ";
+        String temp = "";
+      String patternString1 = "(\\(.*\\))";
+      Pattern pattern = Pattern.compile(patternString1);
+      Matcher matcher = pattern.matcher(text);
+      while(matcher.find()) {
+          temp = matcher.group(1);
+      }
+      System.out.println(temp);
     }
 }
